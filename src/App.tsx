@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Link as Nav, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Link as Nav, Route, Switch, useHistory } from 'react-router-dom';
 import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
 import SellerPage from './pages/SellerPage';
@@ -10,6 +10,9 @@ import { Account, addSigninListener, removeSigninListener, signout } from './bae
 import AddProductPage from './pages/AddProductPage';
 import CartPage from './pages/CartPage';
 import NotFoundPage from './pages/NotFoundPage';
+import MyPage from './pages/MyPage';
+import OrdersPage from './pages/OrdersPage';
+import OrderPage from './pages/OrderPage';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
+  const history = useHistory();
   const [account, setAccount] = useState<Account>();
 
   useEffect(() => {
@@ -39,7 +43,7 @@ function App() {
   let signinLink: any;
   let signoutLink: any;
   if(account) {
-    signinLink = <Typography>{account.name}</Typography>
+    signinLink = <Link component={Nav} to="/me" variant="button" color="inherit" className={classes.link}>{account.name}</Link>
     signoutLink = <Button color="inherit" onClick={e=>{signout()}}>Sign-out</Button>
  }
   else {
@@ -68,6 +72,9 @@ function App() {
           <Route path="/seller" component={SellerPage} />
           <Route path="/product/add" component={AddProductPage} />
           <Route path="/cart" component={CartPage} />
+          <Route path="/order" component={OrderPage} />
+          <Route path="/orders" component={OrdersPage} />
+          <Route path="/me" component={MyPage} />
           <Route component={NotFoundPage} />
         </Switch>
       </Container>

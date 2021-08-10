@@ -167,9 +167,15 @@ export async function buy(cart: Cart): Promise<Order> {
     return res.data;
 }
 
-export async function getOrders(account: Account, status: OrderStatus | null): Promise<Order[]> {
-    const res = await instance.get(`/accounts/${account.id}/orders?status=${status}`);
-    return res.data;
+export async function getOrders(account: Account, status: OrderStatus | null = null): Promise<Order[]> {
+    if(status) {
+        const res = await instance.get(`/accounts/${account.id}/orders?status=${status}`);
+        return res.data;
+    }
+    else {
+        const res = await instance.get(`/accounts/${account.id}/orders`);
+        return res.data;
+    }
 }
 
 export async function cancel(order: Order): Promise<Order> {

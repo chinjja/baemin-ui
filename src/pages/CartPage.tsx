@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, Typography } from "@material-ui/core";
-import { useLocation } from "react-router-dom";
-import { Cart, CartProduct, getCartProducts } from "../baemin/Baemin"
+import { useHistory, useLocation } from "react-router-dom";
+import { buy, Cart, CartProduct, getCartProducts } from "../baemin/Baemin"
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
 
 export default function CartPage() {
+    const history = useHistory();
     const location = useLocation();
     const cart = location.state as Cart;
     const [products, setProducts] = useState<CartProduct[]>([]);
@@ -33,6 +34,12 @@ export default function CartPage() {
         }
     })
 
+    const handleBuy = (e: any) => {
+        buy(cart)
+        .then(order => history.push("/order", order))
+        .catch(reason => alert(reason.message))
+    }
+
     return (
         <div>
             <Typography>Cart product List</Typography>
@@ -43,7 +50,7 @@ export default function CartPage() {
                     pageSize={5}
                     />
             </div>
-            <Button variant="outlined" onClick={e=>{}}>Buy</Button>
+            <Button variant="outlined" onClick={handleBuy}>Buy</Button>
         </div>
     );
 }
