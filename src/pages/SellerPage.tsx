@@ -11,7 +11,8 @@ export default function SellerPage() {
     const seller = location.state as Seller;
     const [products, setProducts] = useState<Product[]>([]);
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
-
+    const account = getCurrentAccount();
+    
     useEffect(() => {
         getProducts(seller)
         .then(data => setProducts(data))
@@ -38,7 +39,6 @@ export default function SellerPage() {
     })
 
     const withAccount = (handle: (account: Account)=>void) => {
-        const account = getCurrentAccount();
         if(account) {
             handle(account);
         }
@@ -85,6 +85,10 @@ export default function SellerPage() {
         });
     };
 
+    let addProduct: any;
+    if(account && account.id === seller.account.id) {
+        addProduct = <Button variant="outlined" onClick={handleAddProduct}>Add Product</Button>;
+    }
     return (
         <div>
             <Typography>Seller Details Page</Typography>
@@ -101,7 +105,7 @@ export default function SellerPage() {
                     selectionModel={selectionModel}
                     />
             </div>
-            <Button variant="outlined" onClick={handleAddProduct}>Add Product</Button>
+            {addProduct}
             <Button variant="outlined" onClick={handleAddToCart}>Add to cart</Button>
             <Button variant="outlined" onClick={handleGoToCart}>Go to cart</Button>
         </div>

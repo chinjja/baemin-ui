@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Link as Nav, Route, Switch, useHistory } from 'react-router-dom';
 import LoginPage from './pages/LoginPage'
+import SignupPage from './pages/SignupPage'
 import HomePage from './pages/HomePage'
 import SellerPage from './pages/SellerPage';
 import AddSellerPage from './pages/AddSellerPage';
@@ -42,11 +43,13 @@ function App() {
   }, []);
   let signinLink: any;
   let signoutLink: any;
+  let signupLink: any;
   if(account) {
     signinLink = <Link component={Nav} to="/me" variant="button" color="inherit" className={classes.link}>{account.name}</Link>
     signoutLink = <Button color="inherit" onClick={e=>{signout()}}>Sign-out</Button>
  }
   else {
+    signupLink = <Link component={Nav} to="/signup" variant="button" color="inherit" className={classes.link}>Sign-up</Link>
     signinLink = <Link component={Nav} to="/login" variant="button" color="inherit" className={classes.link}>Sign-in</Link>
   }
   return (
@@ -60,6 +63,7 @@ function App() {
             BAEMIN
           </Typography>
           <Link component={Nav} to="/" variant="button" color="inherit" className={classes.link}>Home</Link>
+          {signupLink}
           {signinLink}
           {signoutLink}
         </Toolbar>
@@ -68,6 +72,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/login" component={LoginPage} />
+          <Route path="/signup" component={SignupPage} />
           <Route path="/seller/add" component={AddSellerPage} />
           <Route path="/seller" component={SellerPage} />
           <Route path="/product/add" component={AddProductPage} />
