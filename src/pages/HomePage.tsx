@@ -1,36 +1,49 @@
 import React, { useEffect, useState } from "react";
-import { Button, List, Typography } from "@material-ui/core";
-import { Redirect, useHistory } from "react-router-dom";
+import { Button, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 import { getSellers, Seller } from "../baemin/Baemin"
-import SellerUi from "../components/SellerUi";
+
+const useStyles = makeStyles({
+    table: {
+        minWidth: 650,
+    },
+});
 
 export default function HomePage() {
+    const classes = useStyles();
+
     const history = useHistory();
     const [sellers, setSellers] = useState<Seller[]>([]);
-    const [error, setError] = useState(false);
 
     useEffect(() => {
         getSellers()
         .then(sellers => {
             setSellers(sellers);
         })
-        .catch(reason => {
-            setError(true);
-        })
     }, []);
-
-    if(error) {
-        return (
-            <Redirect to='/error'/>
-        )
-    }
-    const sellerList = sellers.map((seller, index) => <SellerUi seller={seller} key={index}/>);
+    
     return (
         <div>
             <Typography>Seller Page</Typography>
-            <List>
-                {sellerList}
-            </List>
+            <TableContainer component={Paper}>
+                <Table className={classes.table}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Title</TableCell>
+                            <TableCell>Description</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {sellers.map(row => (
+                            <TableRow key={row.id} onClick={e=>{history.push("/seller", row)}}>
+                                <TableCell>{row.info.name}</TableCell>
+                                <TableCell>{row.info.description}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
             <Button variant="outlined" onClick={e=>{history.push("/seller/add")}}>Add Seller</Button>
         </div>
     );

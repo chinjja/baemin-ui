@@ -5,7 +5,7 @@ import HomePage from './pages/HomePage'
 import SellerDetailsPage from './pages/SellerDetailsPage';
 import AddSellerPage from './pages/AddSellerPage';
 import ErrorPage from './pages/Error';
-import { AppBar, Button, IconButton, Toolbar, Typography, makeStyles, Link } from '@material-ui/core';
+import { AppBar, Button, IconButton, Toolbar, Typography, makeStyles, Link, Container } from '@material-ui/core';
 import { Menu } from '@material-ui/icons';
 import { Account, addSigninListener, removeSigninListener, signout } from './baemin/Baemin';
 import AddProductPage from './pages/AddProductPage';
@@ -59,14 +59,16 @@ function App() {
           {signoutLink}
         </Toolbar>
       </AppBar>
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/login" component={LoginPage} />
-        <Route path="/seller/add" component={AddSellerPage} />
-        <Route path="/seller" component={SellerDetailsPage} />
-        <Route path="/product/add" component={AddProductPage} />
-        <Route path="/not-found" component={ErrorPage} />
-      </Switch>
+      <Container>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/seller/add" component={AddSellerPage} />
+          <Route path="/seller" component={SellerDetailsPage} />
+          <Route path="/product/add" component={AddProductPage} />
+          <Route path="/not-found" component={ErrorPage} />
+        </Switch>
+      </Container>
     </BrowserRouter>
   );
 }
