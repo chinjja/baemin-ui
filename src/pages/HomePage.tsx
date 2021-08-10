@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import { getSellers, Seller } from "../baemin/Baemin"
+import { getCurrentAccount, getSellers, Seller } from "../baemin/Baemin"
 
 const useStyles = makeStyles({
     table: {
@@ -44,7 +44,7 @@ export default function HomePage() {
                 </Table>
             </TableContainer>
 
-            <Button variant="outlined" onClick={e=>{history.push("/seller/add")}}>Add Seller</Button>
+            <Button variant="outlined" onClick={e=>{history.push("/seller/add", getCurrentAccount())}}>Add Seller</Button>
         </div>
     );
 }

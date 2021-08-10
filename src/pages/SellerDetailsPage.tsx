@@ -21,7 +21,7 @@ export default function SellerDetailsPage() {
     useEffect(() => {
         getProducts(seller)
         .then(data => setProducts(data))
-    }, []);
+    }, [seller]);
     
     return (
         <div>

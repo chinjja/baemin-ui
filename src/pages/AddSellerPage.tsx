@@ -1,37 +1,39 @@
 import React, { useState } from 'react'
 import { Button, TextField } from '@material-ui/core'
-import { useHistory } from 'react-router-dom'
-import { getCurrentAccount, newSeller } from '../baemin/Baemin';
+import { Redirect, useHistory, useLocation } from 'react-router-dom'
+import { Account, newSeller } from '../baemin/Baemin';
 
 export default function AddSellerPage() {
     const history = useHistory();
+    const location = useLocation();
+    
+    const account = location.state as Account | undefined;
     const [name, setName] = useState("");
     const [desc, setDesc] = useState("");
     
+    if(account === undefined) {
+        return <Redirect to="/login"/>
+    }
+
     return (
         <form autoComplete="off" onSubmit={e=>{
             e.preventDefault();
-            const account = getCurrentAccount();
-            if(account) {
-                newSeller(account, {
-                    name: name,
-                    description: desc
-                })
-                .then(seller => {
-                    history.push("/seller", {id: seller.id});
-                })
-                .catch(reason => {
-                    if(reason.response.status === 401) {
-                        history.push("/login");
-                    }
-                    else {
-                        history.push("/not-found")
-                    }
-                })
-            }
-            else {
-                history.push("/login");
-            }
+            
+            newSeller(account, {
+                name: name,
+                description: desc
+            })
+            .then(seller => {
+                history.push("/seller", {id: seller.id});
+            })
+            .catch(reason => {
+                if(reason.response.status === 401) {
+                    history.push("/login");
+                }
+                else {
+                    history.push("/not-found")
+                }
+            })
         }}>
             <TextField label="name" onChange={e=>{setName(e.target.value)}} fullWidth/>
             <TextField label="description" onChange={e=>{setDesc(e.target.value)}} fullWidth/>
