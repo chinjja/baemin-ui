@@ -1,8 +1,8 @@
 import { Typography } from "@material-ui/core";
 import React from "react";
 
-export default function Error() {
+export default function NotFoundPage() {
     return (
-        <Typography>Error</Typography>
+        <Typography>Not found</Typography>
     )
 }

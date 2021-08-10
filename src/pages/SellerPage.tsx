@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, Typography } from "@material-ui/core";
 import { useHistory, useLocation } from "react-router-dom";
-import { addToCart, getCart, getCurrentAccount, getProducts, Product, Seller } from "../baemin/Baemin"
+import { Account, addToCart, getCart, getCurrentAccount, getProducts, Product, Seller } from "../baemin/Baemin"
 import SellerUi from "../components/SellerUi";
 import { DataGrid, GridColDef, GridRowId } from "@material-ui/data-grid";
 
-export default function SellerDetailsPage() {
+export default function SellerPage() {
     const history = useHistory();
     const location = useLocation();
     const seller = location.state as Seller;
@@ -37,6 +37,54 @@ export default function SellerDetailsPage() {
         }
     })
 
+    const withAccount = (handle: (account: Account)=>void) => {
+        const account = getCurrentAccount();
+        if(account) {
+            handle(account);
+        }
+        else {
+            history.push("/login");
+        }
+    }
+
+    const handleAddProduct = (e: any) => {
+        withAccount(_ => {
+            history.push("/product/add", seller);
+        });
+    }
+
+    const handleAddToCart = (e: any) => {
+        withAccount(account => {
+            Promise.all(selectionModel.map(product_id=>
+                addToCart(account, product_id as number)
+            ))
+            .then(data => {
+                setSelectionModel([]);
+                alert("장바구니에 추가되었습니다.")
+            })
+            .catch(reason => {
+                alert(reason);
+            })
+        });
+    };
+
+    const handleGoToCart = (e: any) => {
+        withAccount(account => {
+            getCart(account)
+            .then(cart => {
+                history.push("/cart", cart);
+            })
+            .catch(reason => {
+                if(reason.response.status === 404) {
+                    alert('장바구니가 존재하지 않습니다.');
+                }
+                else {
+                    alert(reason);
+                }
+            })
+        });
+    };
+
     return (
         <div>
             <Typography>Seller Details Page</Typography>
@@ -53,43 +101,9 @@ export default function SellerDetailsPage() {
                     selectionModel={selectionModel}
                     />
             </div>
-            <Button variant="outlined" onClick={e=>{history.push("/product/add", seller)}}>Add Product</Button>
-            <Button variant="outlined" onClick={e=>{
-                const account = getCurrentAccount();
-                if(account) {
-                    Promise.all(selectionModel.map(product_id=>
-                        addToCart(account, product_id as number)
-                    ))
-                    .then(data => {
-                        setSelectionModel([]);
-                        alert("장바구니에 추가되었습니다.")
-                    })
-                    .catch(reason => {
-                        alert(reason);
-                    })
-                }
-                else {
-                    history.push("/login");
-                }
-            }}>Add to cart</Button>
-            <Button variant="outlined" onClick={e=>{setSelectionModel([])}}>Buy</Button>
-            <Button variant="outlined" onClick={e=>{
-                const account = getCurrentAccount();
-                if(account) {
-                    getCart(account)
-                    .then(cart => {
-                        history.push("/cart", cart);
-                    })
-                    .catch(reason => {
-                        if(reason.response.status === 404) {
-                            alert('장바구니가 존재하지 않습니다.');
-                        }
-                    })
-                }
-                else {
-                    history.push("/login");
-                }
-            }}>Go to cart</Button>
+            <Button variant="outlined" onClick={handleAddProduct}>Add Product</Button>
+            <Button variant="outlined" onClick={handleAddToCart}>Add to cart</Button>
+            <Button variant="outlined" onClick={handleGoToCart}>Go to cart</Button>
         </div>
     );
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import { getCurrentAccount, getSellers, Seller } from "../baemin/Baemin"
+import { Account, getCurrentAccount, getSellers, Seller } from "../baemin/Baemin"
 
 const useStyles = makeStyles({
     table: {
@@ -20,7 +20,26 @@ export default function HomePage() {
         .then(sellers => {
             setSellers(sellers);
         })
+        .catch(reason => {
+            alert(reason.message);
+        })
     }, []);
+
+    const withAccount = (handle: (account: Account)=>void) => {
+        const account = getCurrentAccount();
+        if(account) {
+            handle(account);
+        }
+        else {
+            history.push("/login");
+        }
+    }
+
+    const handleAddSeller = (e: any) => {
+        withAccount(account => {
+            history.push("/seller/add", account);
+        })
+    }
     
     return (
         <div>
@@ -44,7 +63,7 @@ export default function HomePage() {
                 </Table>
             </TableContainer>
 
-            <Button variant="outlined" onClick={e=>{history.push("/seller/add", getCurrentAccount())}}>Add Seller</Button>
+            <Button variant="outlined" onClick={handleAddSeller}>Add Seller</Button>
         </div>
     );
 }

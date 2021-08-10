@@ -16,12 +16,11 @@ export default function LoginPage() {
                     email: email,
                     password: password
                 })
-                .then(account => {
+                .then(_ => {
                     history.goBack();
                 })
                 .catch(reason => {
-                    console.log(reason);
-                    history.push("/not-found");
+                    alert(reason.message);
                 })
             }}>
                 <TextField type="email" label="email" onChange={e=>{setEmail(e.target.value)}} fullWidth/>

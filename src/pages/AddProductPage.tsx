@@ -13,16 +13,11 @@ export default function AddProductPage() {
         <form autoComplete="off" onSubmit={e=>{
             e.preventDefault();
             newProduct(seller, data!)
-            .then(product => {
+            .then(_ => {
                 history.goBack();
             })
             .catch(reason => {
-                if(reason.response.status === 401) {
-                    history.push('/login');
-                }
-                else {
-                    history.push('/not-found');
-                }
+                alert(reason.message);
             })
         }}>
             <TextField label="code" onChange={e=>{setData({...data!, code: e.target.value})}} fullWidth/>

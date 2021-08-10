@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Link as Nav, Route, Switch } from 'react-router-dom';
 import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
-import SellerDetailsPage from './pages/SellerDetailsPage';
+import SellerPage from './pages/SellerPage';
 import AddSellerPage from './pages/AddSellerPage';
-import ErrorPage from './pages/Error';
 import { AppBar, Button, IconButton, Toolbar, Typography, makeStyles, Link, Container } from '@material-ui/core';
 import { Menu } from '@material-ui/icons';
 import { Account, addSigninListener, removeSigninListener, signout } from './baemin/Baemin';
 import AddProductPage from './pages/AddProductPage';
 import CartPage from './pages/CartPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,10 +65,10 @@ function App() {
           <Route exact path="/" component={HomePage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/seller/add" component={AddSellerPage} />
-          <Route path="/seller" component={SellerDetailsPage} />
+          <Route path="/seller" component={SellerPage} />
           <Route path="/product/add" component={AddProductPage} />
           <Route path="/cart" component={CartPage} />
-          <Route path="/not-found" component={ErrorPage} />
+          <Route component={NotFoundPage} />
         </Switch>
       </Container>
     </BrowserRouter>
