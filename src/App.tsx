@@ -7,7 +7,8 @@ import AddSellerPage from './pages/AddSellerPage';
 import ErrorPage from './pages/Error';
 import { AppBar, Button, IconButton, Toolbar, Typography, makeStyles, Link } from '@material-ui/core';
 import { Menu } from '@material-ui/icons';
-import { Account, addSigninListener, removeSigninListener, SigninListener, signout } from './baemin/Baemin';
+import { Account, addSigninListener, removeSigninListener, signout } from './baemin/Baemin';
+import AddProductPage from './pages/AddProductPage';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,6 +64,7 @@ function App() {
         <Route path="/login" component={LoginPage} />
         <Route path="/seller/add" component={AddSellerPage} />
         <Route path="/seller" component={SellerDetailsPage} />
+        <Route path="/product/add" component={AddProductPage} />
         <Route path="/not-found" component={ErrorPage} />
       </Switch>
     </BrowserRouter>

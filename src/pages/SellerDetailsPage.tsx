@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { List, Typography } from "@material-ui/core";
-import { Redirect, useLocation } from "react-router-dom";
+import { Button, List, Typography } from "@material-ui/core";
+import { Redirect, useHistory, useLocation } from "react-router-dom";
 import { getProducts, getSeller, Product, Seller } from "../baemin/Baemin"
 import SellerUi from "../components/SellerUi";
 import ProductUi from "../components/ProductUi";
 
 export default function SellerDetailsPage() {
+    const history = useHistory();
     const location = useLocation();
     const state = location.state as any;
     const [seller, setSeller] = useState<Seller>();
@@ -39,6 +40,8 @@ export default function SellerDetailsPage() {
             <List>
                 {productList}
             </List>
+            
+            <Button variant="outlined" onClick={e=>{history.push("/product/add", seller)}}>Add Product</Button>
         </div>
     );
 }
