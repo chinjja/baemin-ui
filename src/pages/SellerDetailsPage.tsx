@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Button, makeStyles, Typography } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import { useHistory, useLocation } from "react-router-dom";
-import { getProducts, Product, Seller } from "../baemin/Baemin"
+import { addToCart, getCart, getCurrentAccount, getProducts, Product, Seller } from "../baemin/Baemin"
 import SellerUi from "../components/SellerUi";
-import { DataGrid, GridColDef } from "@material-ui/data-grid";
+import { DataGrid, GridColDef, GridRowId } from "@material-ui/data-grid";
 
 export default function SellerDetailsPage() {
     const history = useHistory();
     const location = useLocation();
     const seller = location.state as Seller;
     const [products, setProducts] = useState<Product[]>([]);
+    const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
 
     useEffect(() => {
         getProducts(seller)
@@ -48,9 +49,47 @@ export default function SellerDetailsPage() {
                     pageSize={5}
                     checkboxSelection
                     disableSelectionOnClick
+                    onSelectionModelChange={e=>setSelectionModel(e)}
+                    selectionModel={selectionModel}
                     />
             </div>
             <Button variant="outlined" onClick={e=>{history.push("/product/add", seller)}}>Add Product</Button>
+            <Button variant="outlined" onClick={e=>{
+                const account = getCurrentAccount();
+                if(account) {
+                    Promise.all(selectionModel.map(product_id=>
+                        addToCart(account, product_id as number)
+                    ))
+                    .then(data => {
+                        setSelectionModel([]);
+                        alert("장바구니에 추가되었습니다.")
+                    })
+                    .catch(reason => {
+                        alert(reason);
+                    })
+                }
+                else {
+                    history.push("/login");
+                }
+            }}>Add to cart</Button>
+            <Button variant="outlined" onClick={e=>{setSelectionModel([])}}>Buy</Button>
+            <Button variant="outlined" onClick={e=>{
+                const account = getCurrentAccount();
+                if(account) {
+                    getCart(account)
+                    .then(cart => {
+                        history.push("/cart", cart);
+                    })
+                    .catch(reason => {
+                        if(reason.response.status === 404) {
+                            alert('장바구니가 존재하지 않습니다.');
+                        }
+                    })
+                }
+                else {
+                    history.push("/login");
+                }
+            }}>Go to cart</Button>
         </div>
     );
 }

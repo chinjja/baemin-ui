@@ -47,6 +47,28 @@ export interface SignIn {
     password: string;
 }
 
+export type OrderStatus = "IN_PROGRESS" | "CANCELLED" | "COMPLETED";
+
+export interface Order {
+    id: number,
+    account: Account,
+    status: OrderStatus,
+    createdAt: Date,
+}
+
+export interface Cart {
+    id: number,
+    account: Account,
+    order: Order | null,
+}
+
+export interface CartProduct {
+    id: number,
+    cart: Cart,
+    product: Product,
+    quantity: number,
+}
+
 let current_account: Account | undefined;
 
 export function getCurrentAccount(): Account | undefined {
@@ -126,5 +148,46 @@ export async function getProduct(id: number): Promise<Product> {
 
 export async function getProducts(seller: Seller): Promise<Product[]> {
     const res = await instance.get(`/sellers/${seller.id}/products`);
+    return res.data;
+}
+
+export async function addToCart(account: Account, product: Product | number, quantity: number = 1): Promise<CartProduct> {
+    if(typeof product === "number") {
+        const res = await instance.put(`/accounts/${account.id}/products/${product}?quantity=${quantity}`);
+        return res.data;
+    }
+    else {
+        const res = await instance.put(`/accounts/${account.id}/products/${product.id}?quantity=${quantity}`);
+        return res.data;
+    }
+}
+
+export async function buy(cart: Cart): Promise<Order> {
+    const res = await instance.post(`/carts/${cart.id}/orders`);
+    return res.data;
+}
+
+export async function getOrders(account: Account, status: OrderStatus | null): Promise<Order[]> {
+    const res = await instance.get(`/accounts/${account.id}/orders?status=${status}`);
+    return res.data;
+}
+
+export async function cancel(order: Order): Promise<Order> {
+    const res = await instance.patch(`/orders/${order.id}/cancel`);
+    return res.data;
+}
+
+export async function complete(order: Order): Promise<Order> {
+    const res = await instance.patch(`/orders/${order.id}/complete`);
+    return res.data;
+}
+
+export async function getCart(account: Account): Promise<Cart> {
+    const res = await instance.get(`/accounts/${account.id}/cart`);
+    return res.data;
+}
+
+export async function getCartProducts(cart: Cart): Promise<CartProduct[]> {
+    const res = await instance.get(`/carts/${cart.id}/products`);
     return res.data;
 }

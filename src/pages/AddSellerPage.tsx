@@ -24,7 +24,7 @@ export default function AddSellerPage() {
                 description: desc
             })
             .then(seller => {
-                history.push("/seller", {id: seller.id});
+                history.replace("/seller", seller);
             })
             .catch(reason => {
                 if(reason.response.status === 401) {
