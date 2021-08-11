@@ -3,37 +3,43 @@ import { Button, TextField } from "@material-ui/core";
 import { newAccount, NewAccount } from "../baemin/Baemin";
 import { useHistory } from "react-router-dom";
 
+interface Signup extends NewAccount {
+    confirm?: string;
+}
+
 export default function SignupPage() {
     const history = useHistory();
-    const [data, setData] = useState<NewAccount>();
-    const [confirm, setConfirm] = useState("");
+    const [data, setData] = useState<Signup>({});
+
+    const onChange = (e: any) => {
+        setData({
+            ...data,
+            [e.target.name]: e.target.value,
+        })
+    }
 
     return (
         <div>
             <form autoComplete="off" onSubmit={e=>{
                 e.preventDefault();
-                if(data) {
-                    if(data.password === confirm) {
-                        newAccount(data)
-                        .then(_ => {
-                            history.goBack();
-                        })
-                        .catch(reason => {
-                            alert(reason.message);
-                        })
-                    }
-                    else {
-                        alert("not match password");
-                    }
+
+                if(data && (data.password === data.confirm)) {
+                    newAccount(data)
+                    .then(_ => {
+                        history.goBack();
+                    })
+                    .catch(reason => {
+                        alert(reason.message);
+                    })
                 }
                 else {
-                    alert("invalid data");
+                    alert("not match password");
                 }
             }}>
-                <TextField label="Name" onChange={e=>{setData({...data!, name: e.target.value})}} fullWidth/>
-                <TextField type="email" label="Email" onChange={e=>setData({...data!, email: e.target.value})} fullWidth/>
-                <TextField type="password" label="Password" onChange={e=>setData({...data!, password: e.target.value})} fullWidth/>
-                <TextField type="password" label="Confirm" onChange={e=>{setConfirm(e.target.value)}} fullWidth/>
+                <TextField name="name" label="Name" onChange={onChange} fullWidth/>
+                <TextField name="email" type="email" label="Email" onChange={onChange} fullWidth/>
+                <TextField name="password" type="password" label="Password" onChange={onChange} fullWidth/>
+                <TextField name="confirm" type="password" label="Confirm" onChange={onChange} fullWidth/>
                 <Button type="submit" variant="outlined">Submit</Button>
             </form>
         </div>

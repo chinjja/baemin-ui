@@ -12,8 +12,8 @@ export interface Account {
 }
 
 export interface SellerInfo {
-    name: string;
-    description: string;
+    name?: string;
+    description?: string;
 }
 
 export interface Seller {
@@ -23,17 +23,17 @@ export interface Seller {
 }
 
 export interface NewAccount {
-    email: string;
-    password: string;
-    name: string;
+    email?: string;
+    password?: string;
+    name?: string;
 }
 
 export interface ProductInfo {
-    price: number;
-    quantity: number;
-    code: string;
-    title: string;
-    description: string;
+    price?: number;
+    quantity?: number;
+    code?: string;
+    title?: string;
+    description?: string;
 }
 
 export interface Product {
@@ -43,8 +43,8 @@ export interface Product {
 }
 
 export interface SignIn {
-    email: string;
-    password: string;
+    email?: string;
+    password?: string;
 }
 
 export type OrderStatus = "IN_PROGRESS" | "CANCELLED" | "COMPLETED";
@@ -59,7 +59,7 @@ export interface Order {
 export interface Cart {
     id: number,
     account: Account,
-    order: Order | null,
+    order?: Order,
 }
 
 export interface CartProduct {
@@ -76,7 +76,7 @@ export function getCurrentAccount(): Account | undefined {
 }
 
 export interface SigninListener {
-    (account: Account | undefined): void;
+    (account?: Account): void;
 }
 
 const signinList: SigninListener[] = []

@@ -7,12 +7,19 @@ export default function AddProductPage() {
     const history = useHistory();
     const location = useLocation();
     const seller = location.state as Seller;
-    const [data, setData] = useState<ProductInfo>();
+    const [data, setData] = useState<ProductInfo>({});
     
+    const onChange = (e: any) => {
+        setData({
+            ...data,
+            [e.target.name]: e.target.value
+        })
+    }
+
     return (
         <form autoComplete="off" onSubmit={e=>{
             e.preventDefault();
-            newProduct(seller, data!)
+            newProduct(seller, data)
             .then(_ => {
                 history.goBack();
             })
@@ -20,11 +27,11 @@ export default function AddProductPage() {
                 alert(reason.message);
             })
         }}>
-            <TextField label="code" onChange={e=>{setData({...data!, code: e.target.value})}} fullWidth/>
-            <TextField label="title" onChange={e=>{setData({...data!, title: e.target.value})}} fullWidth/>
-            <TextField label="description" onChange={e=>{setData({...data!, description: e.target.value})}} fullWidth/>
-            <TextField type="number" label="price" onChange={e=>{setData({...data!, price: +e.target.value})}} fullWidth/>
-            <TextField type="number" label="quantity" onChange={e=>{setData({...data!, quantity: +e.target.value})}} fullWidth/>
+            <TextField name="code" label="Code" onChange={onChange} fullWidth/>
+            <TextField name="title" label="Title" onChange={onChange} fullWidth/>
+            <TextField name="description" label="Description" onChange={onChange} fullWidth/>
+            <TextField name="price" type="number" label="Price" onChange={onChange} fullWidth/>
+            <TextField name="quantity" type="number" label="Quantity" onChange={onChange} fullWidth/>
             
             <Button type="submit" variant="outlined">Submit</Button>
             <Button variant="outlined" onClick={e=>{history.goBack()}}>Cancel</Button>

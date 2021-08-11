@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 import { Button, TextField } from "@material-ui/core";
-import { signin } from "../baemin/Baemin";
+import { SignIn, signin } from "../baemin/Baemin";
 import { useHistory } from "react-router-dom";
 
 export default function SigninPage() {
     const history = useHistory();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [data, setData] = useState<SignIn>({});
+
+    const onChange = (e: any) => {
+        setData({
+            ...data,
+            [e.target.name]: e.target.value,
+        })
+    }
 
     return (
         <div>
             <form autoComplete="off" onSubmit={e=>{
                 e.preventDefault();
-                 signin({
-                    email: email,
-                    password: password
-                })
+                 signin(data)
                 .then(_ => {
                     history.goBack();
                 })
@@ -23,8 +26,8 @@ export default function SigninPage() {
                     alert(reason.message);
                 })
             }}>
-                <TextField type="email" label="email" onChange={e=>{setEmail(e.target.value)}} fullWidth/>
-                <TextField type="password" label="password" onChange={e=>{setPassword(e.target.value)}} fullWidth/>
+                <TextField name="email" type="email" label="Email" onChange={onChange} fullWidth/>
+                <TextField name="password" type="password" label="Password" onChange={onChange} fullWidth/>
                 <Button type="submit" variant="outlined">Submit</Button>
             </form>
         </div>
