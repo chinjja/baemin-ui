@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Link as Nav, Route, Switch, useHistory } from 'react-router-dom';
-import LoginPage from './pages/LoginPage'
+import SigninPage from './pages/SigninPage'
 import SignupPage from './pages/SignupPage'
 import HomePage from './pages/HomePage'
 import SellerPage from './pages/SellerPage';
@@ -50,7 +50,7 @@ function App() {
  }
   else {
     signupLink = <Link component={Nav} to="/signup" variant="button" color="inherit" className={classes.link}>Sign-up</Link>
-    signinLink = <Link component={Nav} to="/login" variant="button" color="inherit" className={classes.link}>Sign-in</Link>
+    signinLink = <Link component={Nav} to="/signin" variant="button" color="inherit" className={classes.link}>Sign-in</Link>
   }
   return (
     <BrowserRouter>
@@ -71,7 +71,7 @@ function App() {
       <Container>
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route path="/login" component={LoginPage} />
+          <Route path="/signin" component={SigninPage} />
           <Route path="/signup" component={SignupPage} />
           <Route path="/seller/add" component={AddSellerPage} />
           <Route path="/seller" component={SellerPage} />

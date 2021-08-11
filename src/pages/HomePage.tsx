@@ -31,7 +31,7 @@ export default function HomePage() {
             handle(account);
         }
         else {
-            history.push("/login");
+            history.push("/signin");
         }
     }
 

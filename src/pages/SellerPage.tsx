@@ -43,7 +43,7 @@ export default function SellerPage() {
             handle(account);
         }
         else {
-            history.push("/login");
+            history.push("/signin");
         }
     }
 

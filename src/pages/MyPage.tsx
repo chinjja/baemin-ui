@@ -35,6 +35,6 @@ export default function MyPage() {
         );
     }
     else {
-        return <Redirect to="/login"/>
+        return <Redirect to="/signin"/>
     }
 }

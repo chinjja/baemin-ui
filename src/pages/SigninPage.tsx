@@ -3,7 +3,7 @@ import { Button, TextField } from "@material-ui/core";
 import { signin } from "../baemin/Baemin";
 import { useHistory } from "react-router-dom";
 
-export default function LoginPage() {
+export default function SigninPage() {
     const history = useHistory();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
