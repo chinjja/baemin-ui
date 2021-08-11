@@ -152,14 +152,9 @@ export async function getProducts(seller: Seller): Promise<Product[]> {
 }
 
 export async function addToCart(account: Account, product: Product | number, quantity: number = 1): Promise<CartProduct> {
-    if(typeof product === "number") {
-        const res = await instance.put(`/accounts/${account.id}/products/${product}?quantity=${quantity}`);
-        return res.data;
-    }
-    else {
-        const res = await instance.put(`/accounts/${account.id}/products/${product.id}?quantity=${quantity}`);
-        return res.data;
-    }
+    const product_id = typeof product === "number" ? product : product.id;
+    const res = await instance.put(`/accounts/${account.id}/products/${product_id}?quantity=${quantity}`);
+    return res.data;
 }
 
 export async function buy(cart: Cart): Promise<Order> {
