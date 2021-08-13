@@ -58,15 +58,15 @@ export default function SellerPage() {
     const handleGoToCart = () => {
         getCart(account!)
         .then(cart => {
-            history.push("/cart", cart);
-        })
-        .catch(reason => {
-            if(reason.response.status === 404) {
-                alert('장바구니가 존재하지 않습니다.');
+            if(cart) {
+                history.push("/cart", cart);
             }
             else {
-                alert(reason);
+                alert('장바구니가 존재하지 않습니다.');
             }
+        })
+        .catch(reason => {
+            alert(reason.message);
         })
     };
 

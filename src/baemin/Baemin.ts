@@ -230,8 +230,9 @@ export async function complete(order: Order): Promise<Order> {
     return res.data;
 }
 
-export async function getCart(account: Account): Promise<Cart> {
+export async function getCart(account: Account): Promise<Cart | null> {
     const res = await instance.get(`/accounts/${account.id}/cart`);
+    if(res.status == 204) return null;
     return res.data;
 }
 
