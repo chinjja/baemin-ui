@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Link as Nav, Route, Switch, useHistory } from 'react-router-dom';
+import { BrowserRouter, Link as Nav, Route, Switch } from 'react-router-dom';
 import SigninPage from './pages/SigninPage'
 import SignupPage from './pages/SignupPage'
 import HomePage from './pages/HomePage'
@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  const history = useHistory();
   const [account, setAccount] = useState<Account>();
 
   useEffect(() => {

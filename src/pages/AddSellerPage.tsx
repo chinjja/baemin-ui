@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, TextField } from '@material-ui/core'
-import { Redirect, useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { Account, newSeller, SellerInfo } from '../baemin/Baemin';
 
 export default function AddSellerPage() {
