@@ -95,12 +95,33 @@ function fireSigninListeners(account: Account | undefined) {
     signinList.forEach(value => value(account));
 }
 
+const userInfoKey = "userInfo";
+
+interface UserInfo {
+    id: number,
+    token: string,
+}
+
+export async function initSign() {
+    const userInfo = localStorage.getItem(userInfoKey);
+    if(userInfo) {
+        const info = JSON.parse(userInfo) as UserInfo;
+        current_account = await getAccount(info.id);
+        instance.defaults.headers.common['Authorization'] = 'Bearer ' + info.token;
+        fireSigninListeners(current_account);
+    }
+}
+
 export async function signin(data: SignIn): Promise<Account> {
     const res = await instance.post('/signin', data);
     let id = res.data.id;
     let token = res.data.token;
     instance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     current_account = await getAccount(id);
+    localStorage.setItem(userInfoKey, JSON.stringify({
+        id: id,
+        token: token,
+    }));
     fireSigninListeners(current_account);
     return getAccount(id);
 }
@@ -108,6 +129,7 @@ export async function signin(data: SignIn): Promise<Account> {
 export async function signout(): Promise<void> {
     instance.defaults.headers.common['Authorization'] = null;
     current_account = undefined;
+    localStorage.removeItem(userInfoKey);
     fireSigninListeners(current_account);
 }
 

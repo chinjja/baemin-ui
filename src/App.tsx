@@ -7,7 +7,7 @@ import SellerPage from './pages/SellerPage';
 import AddSellerPage from './pages/AddSellerPage';
 import { AppBar, Button, IconButton, Toolbar, Typography, makeStyles, Link, Container } from '@material-ui/core';
 import { Menu } from '@material-ui/icons';
-import { Account, addSigninListener, removeSigninListener, signout } from './baemin/Baemin';
+import { Account, addSigninListener, initSign, removeSigninListener, signout } from './baemin/Baemin';
 import AddProductPage from './pages/AddProductPage';
 import CartPage from './pages/CartPage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -35,6 +35,7 @@ function App() {
   const [account, setAccount] = useState<Account>();
 
   useEffect(() => {
+    initSign();
     addSigninListener(setAccount);
     return ()=> {
       removeSigninListener(setAccount);
