@@ -1,4 +1,5 @@
 import axios from 'axios'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 
 const instance = axios.create({
     baseURL: 'http://localhost:8080/api',
@@ -106,10 +107,24 @@ export async function initSign() {
     const userInfo = localStorage.getItem(userInfoKey);
     if(userInfo) {
         const info = JSON.parse(userInfo) as UserInfo;
+        const token = info.token;
+        const payload = jwt.decode(token, {json: true});
+        
+        if(!payload || isExpired(payload)) {
+            return;
+        }
+
         current_account = await getAccount(info.id);
         instance.defaults.headers.common['Authorization'] = 'Bearer ' + info.token;
         fireSigninListeners(current_account);
     }
+}
+
+function isExpired(payload: JwtPayload): Boolean {
+    if(payload.exp) {
+        return payload.exp * 1000 <= Date.now();
+    }
+    return false;
 }
 
 export async function signin(data: SignIn): Promise<Account> {
