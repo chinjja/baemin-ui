@@ -13,7 +13,7 @@ export default function OrdersPage() {
         getOrders(account)
         .then(orders => setOrders(orders))
         .catch(reason => alert(reason.message))
-    })
+    }, [account])
     
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', flex: 1 },
