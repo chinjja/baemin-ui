@@ -38,57 +38,38 @@ export default function SellerPage() {
         }
     })
 
-    const withAccount = (handle: (account: Account)=>void) => {
-        if(account) {
-            handle(account);
-        }
-        else {
-            history.push("/signin");
-        }
+    const handleAddProduct = () => {
+        history.push("/product/add", seller);
     }
 
-    const handleAddProduct = (e: any) => {
-        withAccount(_ => {
-            history.push("/product/add", seller);
-        });
-    }
+    const handleAddToCart = () => {
+        Promise.all(selectionModel.map(product_id=>
+            addToCart(account!, product_id as number)
+        ))
+        .then(_ => {
+            setSelectionModel([]);
+            alert("장바구니에 추가되었습니다.")
+        })
+        .catch(reason => {
+            alert(reason);
+        })
+    };
 
-    const handleAddToCart = (e: any) => {
-        withAccount(account => {
-            Promise.all(selectionModel.map(product_id=>
-                addToCart(account, product_id as number)
-            ))
-            .then(data => {
-                setSelectionModel([]);
-                alert("장바구니에 추가되었습니다.")
-            })
-            .catch(reason => {
+    const handleGoToCart = () => {
+        getCart(account!)
+        .then(cart => {
+            history.push("/cart", cart);
+        })
+        .catch(reason => {
+            if(reason.response.status === 404) {
+                alert('장바구니가 존재하지 않습니다.');
+            }
+            else {
                 alert(reason);
-            })
-        });
+            }
+        })
     };
 
-    const handleGoToCart = (e: any) => {
-        withAccount(account => {
-            getCart(account)
-            .then(cart => {
-                history.push("/cart", cart);
-            })
-            .catch(reason => {
-                if(reason.response.status === 404) {
-                    alert('장바구니가 존재하지 않습니다.');
-                }
-                else {
-                    alert(reason);
-                }
-            })
-        });
-    };
-
-    let addProduct: any;
-    if(account && account.id === seller.account.id) {
-        addProduct = <Button variant="outlined" onClick={handleAddProduct}>Add Product</Button>;
-    }
     return (
         <div>
             <Typography>Seller Details Page</Typography>
@@ -105,9 +86,9 @@ export default function SellerPage() {
                     selectionModel={selectionModel}
                     />
             </div>
-            {addProduct}
-            <Button variant="outlined" onClick={handleAddToCart}>Add to cart</Button>
-            <Button variant="outlined" onClick={handleGoToCart}>Go to cart</Button>
+            {seller.account.id === account?.id && <Button variant="outlined" onClick={handleAddProduct}>Add Product</Button>}
+            {account && <Button variant="outlined" onClick={handleAddToCart}>Add to cart</Button>}
+            {account && <Button variant="outlined" onClick={handleGoToCart}>Go to cart</Button>}
         </div>
     );
 }

@@ -70,10 +70,14 @@ export interface CartProduct {
     quantity: number,
 }
 
-let current_account: Account | undefined;
+interface Current {
+    account: Account;
+    token: string;
+}
+let current: Current | undefined;
 
 export function getCurrentAccount(): Account | undefined {
-    return current_account;
+    return current?.account;
 }
 
 export interface SigninListener {
@@ -108,20 +112,23 @@ export async function initSign() {
     if(userInfo) {
         const info = JSON.parse(userInfo) as UserInfo;
         const token = info.token;
-        const payload = jwt.decode(token, {json: true});
         
-        if(!payload || isExpired(payload)) {
+        if(isExpired(token)) {
             return;
         }
 
-        current_account = await getAccount(info.id);
+        current ={
+            account: await getAccount(info.id),
+            token: info.token,
+        }
         instance.defaults.headers.common['Authorization'] = 'Bearer ' + info.token;
-        fireSigninListeners(current_account);
+        fireSigninListeners(current.account);
     }
 }
 
-function isExpired(payload: JwtPayload): Boolean {
-    if(payload.exp) {
+function isExpired(token: string): Boolean {
+    const payload = jwt.decode(token, {json: true});
+    if(payload && payload.exp) {
         return payload.exp * 1000 <= Date.now();
     }
     return false;
@@ -132,20 +139,23 @@ export async function signin(data: SignIn): Promise<Account> {
     let id = res.data.id;
     let token = res.data.token;
     instance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-    current_account = await getAccount(id);
+    current = {
+        account: await getAccount(id),
+        token: token,
+    }
     localStorage.setItem(userInfoKey, JSON.stringify({
         id: id,
         token: token,
     }));
-    fireSigninListeners(current_account);
+    fireSigninListeners(current.account);
     return getAccount(id);
 }
 
 export async function signout(): Promise<void> {
     instance.defaults.headers.common['Authorization'] = null;
-    current_account = undefined;
+    current  = undefined;
     localStorage.removeItem(userInfoKey);
-    fireSigninListeners(current_account);
+    fireSigninListeners(undefined);
 }
 
 export async function newAccount(data: NewAccount): Promise<Account> {

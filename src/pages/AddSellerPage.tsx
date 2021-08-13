@@ -29,7 +29,7 @@ export default function AddSellerPage() {
         })
     };
 
-    const handleCancel = (e: any) => {
+    const handleCancel = () => {
         history.goBack();
     };
 

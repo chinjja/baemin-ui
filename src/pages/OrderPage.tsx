@@ -6,13 +6,13 @@ import { Button, Typography } from "@material-ui/core";
 export default function OrderPage() {
     const location = useLocation();
     const [order, setOrder] = useState(location.state as Order);
-    const handleComplete = (e: any) => {
+    const handleComplete = () => {
         complete(order)
         .then(order => setOrder(order))
         .catch(reason => alert(reason.message))
     }
 
-    const handleCancel = (e: any) => {
+    const handleCancel = () => {
         cancel(order)
         .then(order => setOrder(order))
         .catch(reason => alert(reason.message))

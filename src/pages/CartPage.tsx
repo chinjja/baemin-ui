@@ -34,7 +34,7 @@ export default function CartPage() {
         }
     })
 
-    const handleBuy = (e: any) => {
+    const handleBuy = () => {
         buy(cart)
         .then(order => history.push("/order", order))
         .catch(reason => alert(reason.message))
