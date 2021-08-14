@@ -1,23 +1,14 @@
 import React from "react";
 import { Button, Typography } from "@material-ui/core";
 import { useHistory, Redirect } from "react-router-dom";
-import {  getCart, getCurrentAccount } from "../baemin/Baemin";
+import {  getCurrentAccount } from "../baemin/Baemin";
 
 export default function MyPage() {
     const history = useHistory();
     const account = getCurrentAccount();
     if(account) {
         const handleCart = (e: any) => {
-            getCart(account)
-            .then(cart => history.push("/cart", cart))
-            .catch(reason => {
-                if(reason.response.status === 404) {
-                    alert("장바구니가 없습니다.");
-                }
-                else {
-                    alert(reason.message);
-                }
-            })
+            history.push("/cart", account);
         }
     
         const handleOrders = (e: any) => {

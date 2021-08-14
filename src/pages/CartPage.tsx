@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Button, Typography } from "@material-ui/core";
 import { useHistory, useLocation } from "react-router-dom";
-import { buy, Cart, CartProduct, getCartProducts } from "../baemin/Baemin"
+import { Account, AccountProduct, buy, getAccountProducts } from "../baemin/Baemin"
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
 
 export default function CartPage() {
     const history = useHistory();
     const location = useLocation();
-    const cart = location.state as Cart;
-    const [products, setProducts] = useState<CartProduct[]>([]);
+    const account = location.state as Account;
+    const [products, setProducts] = useState<AccountProduct[]>([]);
 
     useEffect(() => {
-        getCartProducts(cart)
+        getAccountProducts(account)
         .then(data => setProducts(data))
         .catch(reason => alert(reason.message))
-    }, [cart]);
+    }, [account]);
     
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', hide: true },
@@ -35,7 +35,7 @@ export default function CartPage() {
     })
 
     const handleBuy = () => {
-        buy(cart)
+        buy(account)
         .then(order => history.push("/order", order))
         .catch(reason => alert(reason.message))
     }

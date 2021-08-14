@@ -57,15 +57,16 @@ export interface Order {
     createdAt: Date,
 }
 
-export interface Cart {
+export interface AccountProduct {
     id: number,
     account: Account,
-    order?: Order,
+    product: Product,
+    quantity: number,
 }
 
-export interface CartProduct {
+export interface OrderProduct {
     id: number,
-    cart: Cart,
+    order: Order,
     product: Product,
     quantity: number,
 }
@@ -198,14 +199,14 @@ export async function getProducts(seller: Seller): Promise<Product[]> {
     return res.data;
 }
 
-export async function addToCart(account: Account, product: Product | number, quantity: number = 1): Promise<CartProduct> {
+export async function addToCart(account: Account, product: Product | number, quantity: number = 1): Promise<AccountProduct> {
     const product_id = typeof product === "number" ? product : product.id;
     const res = await instance.put(`/accounts/${account.id}/products/${product_id}?quantity=${quantity}`);
     return res.data;
 }
 
-export async function buy(cart: Cart): Promise<Order> {
-    const res = await instance.post(`/carts/${cart.id}/orders`);
+export async function buy(account: Account): Promise<Order> {
+    const res = await instance.post(`/accounts/${account.id}/orders`);
     return res.data;
 }
 
@@ -230,13 +231,12 @@ export async function complete(order: Order): Promise<Order> {
     return res.data;
 }
 
-export async function getCart(account: Account): Promise<Cart | null> {
-    const res = await instance.get(`/accounts/${account.id}/cart`);
-    if(res.status == 204) return null;
+export async function getAccountProducts(account: Account): Promise<AccountProduct[]> {
+    const res = await instance.get(`/accounts/${account.id}/products`);
     return res.data;
 }
 
-export async function getCartProducts(cart: Cart): Promise<CartProduct[]> {
-    const res = await instance.get(`/carts/${cart.id}/products`);
+export async function getOrderProducts(order: Order): Promise<OrderProduct[]> {
+    const res = await instance.get(`/orders/${order.id}/products`);
     return res.data;
 }

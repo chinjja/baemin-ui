@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Typography } from "@material-ui/core";
 import { useHistory, useLocation } from "react-router-dom";
-import { Account, addToCart, getCart, getCurrentAccount, getProducts, Product, Seller } from "../baemin/Baemin"
+import { Account, addToCart, getCurrentAccount, getProducts, Product, Seller } from "../baemin/Baemin"
 import SellerUi from "../components/SellerUi";
 import { DataGrid, GridColDef, GridRowId } from "@material-ui/data-grid";
 
@@ -43,6 +43,10 @@ export default function SellerPage() {
     }
 
     const handleAddToCart = () => {
+        if(selectionModel.length === 0) {
+            alert("선택된 제품이 없습니다.");
+            return;
+        }
         Promise.all(selectionModel.map(product_id=>
             addToCart(account!, product_id as number)
         ))
@@ -56,18 +60,7 @@ export default function SellerPage() {
     };
 
     const handleGoToCart = () => {
-        getCart(account!)
-        .then(cart => {
-            if(cart) {
-                history.push("/cart", cart);
-            }
-            else {
-                alert('장바구니가 존재하지 않습니다.');
-            }
-        })
-        .catch(reason => {
-            alert(reason.message);
-        })
+        history.push("/cart", account!);
     };
 
     return (
