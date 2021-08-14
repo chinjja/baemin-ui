@@ -48,14 +48,15 @@ export default function OrderPage() {
             <Typography>{order.status}</Typography>
             <Typography>{order.createdAt}</Typography>
             <Typography>{order.account.email}</Typography>
-            <div style={{height: 400, width: '100%'}}>
-                <DataGrid
-                    columns={columns}
-                    rows={rows}
-                    pageSize={5}
-                    disableSelectionOnClick
-                    />
-            </div>
+            <DataGrid
+                autoHeight
+                columns={columns}
+                rows={rows}
+                pageSize={5}
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                disableSelectionOnClick
+                disableColumnMenu
+                />
             <Button variant="outlined" onClick={handleComplete}>Complete</Button>
             <Button variant="outlined" onClick={handleCancel}>Cancel</Button>
         </div>

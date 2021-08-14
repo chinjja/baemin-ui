@@ -43,13 +43,14 @@ export default function CartPage() {
     return (
         <div>
             <Typography>Cart product List</Typography>
-            <div style={{height: 400, width: '100%'}}>
-                <DataGrid
-                    columns={columns}
-                    rows={rows}
-                    pageSize={5}
-                    />
-            </div>
+            <DataGrid
+                autoHeight
+                columns={columns}
+                rows={rows}
+                pageSize={5}
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                disableColumnMenu
+                />
             <Button variant="outlined" onClick={handleBuy}>Buy</Button>
         </div>
     );

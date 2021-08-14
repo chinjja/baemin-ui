@@ -68,17 +68,18 @@ export default function SellerPage() {
             <Typography>Seller Details Page</Typography>
             <SellerUi seller={seller}/>
             <Typography>Product List</Typography>
-            <div style={{height: 400, width: '100%'}}>
-                <DataGrid
-                    columns={columns}
-                    rows={rows}
-                    pageSize={5}
-                    checkboxSelection
-                    disableSelectionOnClick
-                    onSelectionModelChange={e=>setSelectionModel(e)}
-                    selectionModel={selectionModel}
-                    />
-            </div>
+            <DataGrid
+                autoHeight
+                columns={columns}
+                rows={rows}
+                pageSize={5}
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                checkboxSelection
+                disableColumnMenu
+                disableSelectionOnClick
+                onSelectionModelChange={e=>setSelectionModel(e)}
+                selectionModel={selectionModel}
+                />
             {seller.account.id === account?.id && <Button variant="outlined" onClick={handleAddProduct}>Add Product</Button>}
             {account && <Button variant="outlined" onClick={handleAddToCart}>Add to cart</Button>}
             {account && <Button variant="outlined" onClick={handleGoToCart}>Go to cart</Button>}

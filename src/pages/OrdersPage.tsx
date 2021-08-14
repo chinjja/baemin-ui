@@ -17,8 +17,8 @@ export default function OrdersPage() {
     
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', flex: 1 },
-        { field: 'date', headerName: 'Code', flex: 1},
-        { field: 'status', headerName: 'Title', flex: 1 },
+        { field: 'date', headerName: 'Date', flex: 1},
+        { field: 'status', headerName: 'Status', flex: 1 },
     ]
 
     const rows = orders.map(row => {
@@ -31,14 +31,15 @@ export default function OrdersPage() {
     })
 
     return (
-        <div style={{height: 400, width: '100%'}}>
-            <DataGrid
-                columns={columns}
-                rows={rows}
-                pageSize={5}
-                onRowClick={e=>history.push("/order", e.row.value)}
-                disableSelectionOnClick
-                />
-        </div>
+        <DataGrid
+            autoHeight
+            columns={columns}
+            rows={rows}
+            pageSize={5}
+            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            onRowClick={e=>history.push("/order", e.row.value)}
+            disableSelectionOnClick
+            disableColumnMenu
+            />
     );
 }
