@@ -63,6 +63,10 @@ export interface Order {
     createdAt: Date,
 }
 
+export interface AccountProductUpdateDto {
+    quantity?: number
+}
+
 export interface AccountProduct {
     id: number;
     account: Account,
@@ -232,6 +236,10 @@ export async function cancel(order: Order): Promise<ResponseEntity<Order>> {
 
 export async function complete(order: Order): Promise<ResponseEntity<Order>> {
     return instance.patch(`/orders/${order.id}/complete`);
+}
+
+export async function updateAccountProduct(entity: AccountProduct, dto: AccountProductUpdateDto): Promise<ResponseEntity<AccountProduct>> {
+    return instance.patch(`/account-products/${entity.id}`, dto);
 }
 
 export async function deleteAccountProduct(entity: AccountProduct): Promise<ResponseEntity<void>> {

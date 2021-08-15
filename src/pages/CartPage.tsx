@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Typography } from "@material-ui/core";
 import { useHistory, useLocation } from "react-router-dom";
-import { Account, AccountProduct, buy, deleteAccountProduct, getAccountProducts } from "../baemin/Baemin"
+import { Account, AccountProduct, AccountProductUpdateDto, buy, deleteAccountProduct, getAccountProducts, updateAccountProduct } from "../baemin/Baemin"
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
 
 export default function CartPage() {
@@ -27,7 +27,7 @@ export default function CartPage() {
         { field: 'title', headerName: 'Title', flex: 1 },
         { field: 'description', headerName: 'Description', flex: 1 },
         { field: 'price', headerName: 'Price', type: 'number', flex: 1 },
-        { field: 'quantity', headerName: 'Quantity', type: 'number', flex: 1 },
+        { field: 'quantity', headerName: 'Quantity', type: 'number', flex: 1, editable: true },
         {
             field: 'delete',
             headerName: ' ',
@@ -64,6 +64,14 @@ export default function CartPage() {
         .catch(reason => alert(reason.message))
     }
 
+    const handleUpdate = (entity: AccountProduct, data: AccountProductUpdateDto) => {
+        updateAccountProduct(entity, data)
+        .then(res => {
+            loadProducts();
+        })
+        .catch(reason => alert(reason.message))
+    }
+
     return (
         <div>
             <Typography>Cart product List</Typography>
@@ -74,6 +82,11 @@ export default function CartPage() {
                 pageSize={5}
                 rowsPerPageOptions={[5, 10, 25, 50, 100]}
                 disableColumnMenu
+                onCellEditCommit={e=>{
+                    handleUpdate((e as any).row, {
+                        [e.field]: +e.value!
+                    })
+                }}
                 />
             <Button variant="outlined" onClick={handleBuy}>Buy</Button>
         </div>
