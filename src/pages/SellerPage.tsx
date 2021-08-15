@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Typography } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { useHistory, useLocation } from "react-router-dom";
 import { Account, addToCart, getCurrentAccount, getProducts, Product, Seller } from "../baemin/Baemin"
 import SellerUi from "../components/SellerUi";
@@ -61,9 +61,7 @@ export default function SellerPage() {
 
     return (
         <div>
-            <Typography>Seller Details Page</Typography>
             <SellerUi seller={seller}/>
-            <Typography>Product List</Typography>
             <DataGrid
                 autoHeight
                 columns={columns}
