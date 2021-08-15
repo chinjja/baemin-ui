@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Typography } from "@material-ui/core";
+import { Box, Button, Typography } from "@material-ui/core";
 import { useHistory, useLocation } from "react-router-dom";
 import { Account, AccountProduct, AccountProductUpdateDto, buy, deleteAccountProduct, getAccountProducts, updateAccountProduct } from "../baemin/Baemin"
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
@@ -73,23 +73,25 @@ export default function CartPage() {
     }
 
     return (
-        <div>
-            <Typography>Cart product List</Typography>
-            <DataGrid
-                autoHeight
-                columns={columns}
-                rows={rows}
-                pageSize={5}
-                rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                disableColumnMenu
-                disableSelectionOnClick
-                onCellEditCommit={e=>{
-                    handleUpdate((e as any).row, {
-                        [e.field]: +e.value!
-                    })
-                }}
-                />
+        <>
+            <Typography variant="h6">Cart</Typography>
+            <Box my={1}>
+                <DataGrid
+                    autoHeight
+                    columns={columns}
+                    rows={rows}
+                    pageSize={5}
+                    rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                    disableColumnMenu
+                    disableSelectionOnClick
+                    onCellEditCommit={e=>{
+                        handleUpdate((e as any).row, {
+                            [e.field]: +e.value!
+                        })
+                    }}
+                    />
+            </Box>
             <Button variant="outlined" onClick={handleBuy}>Buy</Button>
-        </div>
+        </>
     );
 }

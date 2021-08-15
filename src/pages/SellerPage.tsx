@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import { useHistory, useLocation } from "react-router-dom";
 import { Account, addToCart, getCurrentAccount, getProducts, Product, Seller } from "../baemin/Baemin"
 import SellerUi from "../components/SellerUi";
@@ -60,23 +60,25 @@ export default function SellerPage() {
     };
 
     return (
-        <div>
+        <>
             <SellerUi seller={seller}/>
-            <DataGrid
-                autoHeight
-                columns={columns}
-                rows={rows}
-                pageSize={5}
-                rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                checkboxSelection
-                disableColumnMenu
-                disableSelectionOnClick
-                onSelectionModelChange={e=>setSelectionModel(e)}
-                selectionModel={selectionModel}
-                />
+            <Box my={1}>
+                <DataGrid
+                    autoHeight
+                    columns={columns}
+                    rows={rows}
+                    pageSize={5}
+                    rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                    checkboxSelection
+                    disableColumnMenu
+                    disableSelectionOnClick
+                    onSelectionModelChange={e=>setSelectionModel(e)}
+                    selectionModel={selectionModel}
+                    />
+            </Box>
             {seller.account.id === account?.id && <Button variant="outlined" onClick={handleAddProduct}>Add Product</Button>}
             {account && <Button variant="outlined" onClick={handleAddToCart}>Add to cart</Button>}
             {account && <Button variant="outlined" onClick={handleGoToCart}>Go to cart</Button>}
-        </div>
+        </>
     );
 }

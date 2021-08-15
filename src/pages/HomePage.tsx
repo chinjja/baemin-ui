@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Typography } from "@material-ui/core";
+import { Box, Button, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { getCurrentAccount, getSellers, Seller } from "../baemin/Baemin"
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
@@ -38,20 +38,21 @@ export default function HomePage() {
     })
 
     return (
-        <div>
-            <Typography>Seller Page</Typography>
-            <DataGrid
-                autoHeight
-                columns={columns}
-                rows={rows}
-                pageSize={5}
-                rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                onRowClick={e=>history.push("/seller", e.row)}
-                disableSelectionOnClick
-                disableColumnMenu
-                />
-
+        <>
+            <Typography variant="h6">List of seller</Typography>
+            <Box my={1}>
+                <DataGrid
+                    autoHeight
+                    columns={columns}
+                    rows={rows}
+                    pageSize={5}
+                    rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                    onRowClick={e=>history.push("/seller", e.row)}
+                    disableSelectionOnClick
+                    disableColumnMenu
+                    />
+            </Box>
             {account && <Button variant="outlined" onClick={handleAddSeller}>Add Seller</Button>}
-        </div>
+        </>
     );
 }

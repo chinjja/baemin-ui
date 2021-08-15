@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, TextField } from '@material-ui/core'
+import { Box, Button, Divider, TextField, Typography } from '@material-ui/core'
 import { useHistory, useLocation } from 'react-router-dom'
 import { newProduct, ProductInfo, Seller } from '../baemin/Baemin';
 
@@ -16,25 +16,33 @@ export default function AddProductPage() {
         })
     }
 
-    return (
-        <form autoComplete="off" onSubmit={e=>{
-            e.preventDefault();
-            newProduct(seller, data)
+    const handleCreate = (e: any) => {
+        e.preventDefault();
+        newProduct(seller, data)
             .then(_ => {
                 history.goBack();
             })
             .catch(reason => {
                 alert(reason.message);
             })
-        }}>
-            <TextField name="code" label="Code" onChange={onChange} fullWidth/>
-            <TextField name="title" label="Title" onChange={onChange} fullWidth/>
-            <TextField name="description" label="Description" onChange={onChange} fullWidth/>
-            <TextField name="price" type="number" label="Price" onChange={onChange} fullWidth/>
-            <TextField name="quantity" type="number" label="Quantity" onChange={onChange} fullWidth/>
-            
-            <Button type="submit" variant="outlined">Submit</Button>
-            <Button variant="outlined" onClick={e=>{history.goBack()}}>Cancel</Button>
-        </form>
+    }
+
+    return (
+        <>
+            <Typography variant="h6">New Product</Typography>
+            <Box my={1}>
+                <Divider/>
+            </Box>
+            <form onSubmit={handleCreate}>
+                <Box mb={1}>
+                    <TextField name="code" label="Code" onChange={onChange} fullWidth/>
+                    <TextField name="title" label="Title" onChange={onChange} fullWidth/>
+                    <TextField name="description" label="Description" onChange={onChange} fullWidth/>
+                    <TextField name="price" type="number" label="Price" onChange={onChange} fullWidth/>
+                    <TextField name="quantity" type="number" label="Quantity" onChange={onChange} fullWidth/>
+                </Box>
+                <Button type="submit" variant="outlined">Create</Button>
+            </form>
+        </>
     )
 }

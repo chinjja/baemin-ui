@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { cancel, complete, getOrderProducts, Order, OrderProduct } from "../baemin/Baemin";
-import { Button, Typography } from "@material-ui/core";
+import { Box, Button, Divider, Typography } from "@material-ui/core";
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
 
 export default function OrderPage() {
@@ -41,22 +41,28 @@ export default function OrderPage() {
     })
 
     return (
-        <div>
-            <Typography>{order.id}</Typography>
-            <Typography>{order.status}</Typography>
-            <Typography>{order.createdAt}</Typography>
-            <Typography>{order.account.email}</Typography>
-            <DataGrid
-                autoHeight
-                columns={columns}
-                rows={rows}
-                pageSize={5}
-                rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                disableSelectionOnClick
-                disableColumnMenu
-                />
+        <>
+            <Typography variant="h6">Order</Typography>
+            <Box my={1}>
+                <Divider/>
+            </Box>
+            <Typography variant="body2">{order.id}</Typography>
+            <Typography variant="body2">{order.status}</Typography>
+            <Typography variant="body2">{order.createdAt}</Typography>
+            <Typography variant="body2">{order.account.email}</Typography>
+            <Box my={1}>
+                <DataGrid
+                    autoHeight
+                    columns={columns}
+                    rows={rows}
+                    pageSize={5}
+                    rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                    disableSelectionOnClick
+                    disableColumnMenu
+                    />
+            </Box>
             <Button variant="outlined" onClick={handleComplete}>Complete</Button>
             <Button variant="outlined" onClick={handleCancel}>Cancel</Button>
-        </div>
+        </>
     );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Typography } from "@material-ui/core";
+import { Box, Button, Divider, Grid, TextField, Typography } from "@material-ui/core";
 import { useHistory, Redirect } from "react-router-dom";
 import {  getCurrentAccount } from "../baemin/Baemin";
 
@@ -16,13 +16,25 @@ export default function MyPage() {
         }
     
         return (
-            <div>
-                <Typography>My page</Typography>
-                <Typography>{account.name}</Typography>
-                <Typography>{account.email}</Typography>
+            <>
+                <Typography variant="h6">My page</Typography>
+                <Box my={1}>
+                    <Grid container direction="column" spacing={1}>
+                        <Grid item>
+                            <TextField fullWidth label="Name" variant="outlined" defaultValue={account.name}></TextField>
+                        </Grid>
+                        <Grid item>
+                            <TextField fullWidth label="Email" variant="outlined" defaultValue={account.email}></TextField>
+                        </Grid>
+                    </Grid>
+                </Box>
+                <Button variant="outlined" disabled>Modify</Button>
+                <Box my={1}>
+                    <Divider/>
+                </Box>
                 <Button variant="outlined" onClick={handleCart}>Cart</Button>
                 <Button variant="outlined" onClick={handleOrders}>Orders</Button>
-            </div>
+            </>
         );
     }
     else {

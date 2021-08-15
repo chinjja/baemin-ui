@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
 import { useHistory, useLocation } from "react-router-dom";
 import { Account, getOrders, Order } from "../baemin/Baemin";
+import { Box, Typography } from "@material-ui/core";
 
 export default function OrdersPage() {
     const history = useHistory();
@@ -28,15 +29,20 @@ export default function OrdersPage() {
     })
 
     return (
-        <DataGrid
-            autoHeight
-            columns={columns}
-            rows={rows}
-            pageSize={5}
-            rowsPerPageOptions={[5, 10, 25, 50, 100]}
-            onRowClick={e=>history.push("/order", e.row)}
-            disableSelectionOnClick
-            disableColumnMenu
-            />
+        <>
+            <Typography variant="h6">List of order</Typography>
+            <Box my={1}>
+                <DataGrid
+                    autoHeight
+                    columns={columns}
+                    rows={rows}
+                    pageSize={5}
+                    rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                    onRowClick={e=>history.push("/order", e.row)}
+                    disableSelectionOnClick
+                    disableColumnMenu
+                    />
+            </Box>
+        </>
     );
 }
