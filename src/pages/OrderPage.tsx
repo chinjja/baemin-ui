@@ -61,8 +61,8 @@ export default function OrderPage() {
                     disableColumnMenu
                     />
             </Box>
-            <Button variant="outlined" onClick={handleComplete}>Complete</Button>
-            <Button variant="outlined" onClick={handleCancel}>Cancel</Button>
+            <Button variant="outlined" onClick={handleComplete} disabled={order.status !== "IN_PROGRESS" || undefined}>Complete</Button>
+            <Button variant="outlined" onClick={handleCancel} disabled={order.status !== "IN_PROGRESS" || undefined}>Cancel</Button>
         </>
     );
 }

@@ -77,7 +77,7 @@ export default function SellerPage() {
                     />
             </Box>
             {seller.account.id === account?.id && <Button variant="outlined" onClick={handleAddProduct}>Add Product</Button>}
-            {account && <Button variant="outlined" onClick={handleAddToCart}>Add to cart</Button>}
+            {account && <Button variant="outlined" onClick={handleAddToCart} disabled={selectionModel.length === 0 || undefined}>Add to cart</Button>}
             {account && <Button variant="outlined" onClick={handleGoToCart}>Go to cart</Button>}
         </>
     );
