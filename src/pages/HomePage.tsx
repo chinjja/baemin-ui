@@ -11,8 +11,8 @@ export default function HomePage() {
 
     useEffect(() => {
         getSellers()
-        .then(sellers => {
-            setSellers(sellers);
+        .then(res => {
+            setSellers(res.data || []);
         })
         .catch(reason => {
             alert(reason.message);

@@ -12,7 +12,9 @@ export default function CartPage() {
 
     useEffect(() => {
         getAccountProducts(account)
-        .then(data => setProducts(data))
+        .then(res => {
+            setProducts(res.data || []);
+        })
         .catch(reason => alert(reason.message))
     }, [account]);
     
@@ -36,7 +38,7 @@ export default function CartPage() {
 
     const handleBuy = () => {
         buy(account)
-        .then(order => history.push("/order", order))
+        .then(res => history.push("/order", res.data!))
         .catch(reason => alert(reason.message))
     }
 

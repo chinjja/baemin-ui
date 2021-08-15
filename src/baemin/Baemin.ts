@@ -6,6 +6,12 @@ const instance = axios.create({
     
 })
 
+interface ResponseEntity<T> {
+    status: number;
+    headers: Headers;
+    data?: T;
+}
+
 export interface Account {
     id: number;
     email: string;
@@ -51,14 +57,14 @@ export interface SignIn {
 export type OrderStatus = "IN_PROGRESS" | "CANCELLED" | "COMPLETED";
 
 export interface Order {
-    id: number,
+    id: number;
     account: Account,
     status: OrderStatus,
     createdAt: Date,
 }
 
 export interface AccountProduct {
-    id: number,
+    id: number;
     account: Account,
     product: Product,
     quantity: number,
@@ -118,8 +124,13 @@ export async function initSign() {
             return;
         }
 
+        const response = await getAccount(info.id);
+
+        if(!response.data) {
+            return;
+        }
         current ={
-            account: await getAccount(info.id),
+            account: response.data,
             token: info.token,
         }
         instance.defaults.headers.common['Authorization'] = 'Bearer ' + info.token;
@@ -140,8 +151,10 @@ export async function signin(data: SignIn): Promise<Account> {
     let id = res.data.id;
     let token = res.data.token;
     instance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+    const response = await getAccount(id);
+    const account = response.data!;
     current = {
-        account: await getAccount(id),
+        account: account,
         token: token,
     }
     localStorage.setItem(userInfoKey, JSON.stringify({
@@ -149,7 +162,7 @@ export async function signin(data: SignIn): Promise<Account> {
         token: token,
     }));
     fireSigninListeners(current.account);
-    return getAccount(id);
+    return account;
 }
 
 export async function signout(): Promise<void> {
@@ -159,84 +172,72 @@ export async function signout(): Promise<void> {
     fireSigninListeners(undefined);
 }
 
-export async function newAccount(data: NewAccount): Promise<Account> {
-    const res = await instance.post('/accounts', data);
-    return res.data;
+export async function newAccount(data: NewAccount): Promise<ResponseEntity<Account>> {
+    return instance.post('/accounts', data);
 }
 
-export async function getAccount(id: number): Promise<Account> {
-    const res = await instance.get(`/accounts/${id}`);
-    return res.data;
+export async function getAccount(id: number): Promise<ResponseEntity<Account>> {
+    return instance.get(`/accounts/${id}`);
 }
 
-export async function newSeller(account: Account, data: SellerInfo): Promise<Seller> {
-    const res = await instance.post(`/accounts/${account.id}/sellers`, data);
-    return res.data;
+export async function newSeller(account: Account, data: SellerInfo): Promise<ResponseEntity<Seller>> {
+    return instance.post(`/accounts/${account.id}/sellers`, data);
 }
 
-export async function getSeller(id: number): Promise<Seller> {
-    const res = await instance.get(`/sellers/${id}`);
-    return res.data;
+export async function getSeller(id: number): Promise<ResponseEntity<Seller>> {
+    return instance.get(`/sellers/${id}`);
 }
 
-export async function getSellers(): Promise<Seller[]> {
-    const res = await instance.get('/sellers');
-    return res.data;
+export async function getSellers(): Promise<ResponseEntity<Seller[]>> {
+    return await instance.get('/sellers');
 }
 
-export async function newProduct(seller: Seller, data: ProductInfo): Promise<Product> {
-    const res = await instance.post(`/sellers/${seller.id}/products`, data);
-    return res.data;
+export async function newProduct(seller: Seller, data: ProductInfo): Promise<ResponseEntity<Product>> {
+    return instance.post(`/sellers/${seller.id}/products`, data);
 }
 
-export async function getProduct(id: number): Promise<Product> {
-    const res = await instance.get(`/products/${id}`);
-    return res.data;
+export async function updateProduct(product: Product, info: ProductInfo): Promise<ResponseEntity<Product>> {
+    return instance.patch(`/products/${product.id}`, info);
+
+}
+export async function getProduct(id: number): Promise<ResponseEntity<Product>> {
+    return instance.get(`/products/${id}`);
 }
 
-export async function getProducts(seller: Seller): Promise<Product[]> {
-    const res = await instance.get(`/sellers/${seller.id}/products`);
-    return res.data;
+export async function getProducts(seller: Seller): Promise<ResponseEntity<Product[]>> {
+    return instance.get(`/sellers/${seller.id}/products`);
 }
 
-export async function addToCart(account: Account, product: Product | number, quantity: number = 1): Promise<AccountProduct> {
+export async function addToCart(account: Account, product: Product | number, quantity: number = 1): Promise<ResponseEntity<AccountProduct>> {
     const product_id = typeof product === "number" ? product : product.id;
-    const res = await instance.put(`/accounts/${account.id}/products/${product_id}?quantity=${quantity}`);
-    return res.data;
+    return instance.put(`/accounts/${account.id}/products/${product_id}?quantity=${quantity}`);
 }
 
-export async function buy(account: Account): Promise<Order> {
-    const res = await instance.post(`/accounts/${account.id}/orders`);
-    return res.data;
+export async function buy(account: Account): Promise<ResponseEntity<Order>> {
+    return instance.post(`/accounts/${account.id}/orders`);
 }
 
-export async function getOrders(account: Account, status: OrderStatus | null = null): Promise<Order[]> {
+export async function getOrders(account: Account, status: OrderStatus | null = null): Promise<ResponseEntity<Order[]>> {
     if(status) {
-        const res = await instance.get(`/accounts/${account.id}/orders?status=${status}`);
-        return res.data;
+        return instance.get(`/accounts/${account.id}/orders?status=${status}`);
     }
     else {
-        const res = await instance.get(`/accounts/${account.id}/orders`);
-        return res.data;
+        return instance.get(`/accounts/${account.id}/orders`);
     }
 }
 
-export async function cancel(order: Order): Promise<Order> {
-    const res = await instance.patch(`/orders/${order.id}/cancel`);
-    return res.data;
+export async function cancel(order: Order): Promise<ResponseEntity<Order>> {
+    return instance.patch(`/orders/${order.id}/cancel`);
 }
 
-export async function complete(order: Order): Promise<Order> {
-    const res = await instance.patch(`/orders/${order.id}/complete`);
-    return res.data;
+export async function complete(order: Order): Promise<ResponseEntity<Order>> {
+    return instance.patch(`/orders/${order.id}/complete`);
 }
 
-export async function getAccountProducts(account: Account): Promise<AccountProduct[]> {
-    const res = await instance.get(`/accounts/${account.id}/products`);
-    return res.data;
+export async function getAccountProducts(account: Account): Promise<ResponseEntity<AccountProduct[]>> {
+    return instance.get(`/accounts/${account.id}/products`);
 }
 
-export async function getOrderProducts(order: Order): Promise<OrderProduct[]> {
-    const res = await instance.get(`/orders/${order.id}/products`);
-    return res.data;
+export async function getOrderProducts(order: Order): Promise<ResponseEntity<OrderProduct[]>> {
+    return instance.get(`/orders/${order.id}/products`);
 }

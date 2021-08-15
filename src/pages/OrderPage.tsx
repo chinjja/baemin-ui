@@ -11,19 +11,19 @@ export default function OrderPage() {
 
     useEffect(() => {
         getOrderProducts(order)
-        .then(data => setProducts(data))
+        .then(res => setProducts(res.data || []))
         .catch(reason => alert(reason.message))
     }, [order])
 
     const handleComplete = () => {
         complete(order)
-        .then(order => setOrder(order))
+        .then(res => setOrder(res.data!))
         .catch(reason => alert(reason.message))
     }
 
     const handleCancel = () => {
         cancel(order)
-        .then(order => setOrder(order))
+        .then(res => setOrder(res.data!))
         .catch(reason => alert(reason.message))
     }
 

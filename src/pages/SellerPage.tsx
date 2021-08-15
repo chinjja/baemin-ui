@@ -15,7 +15,7 @@ export default function SellerPage() {
     
     useEffect(() => {
         getProducts(seller)
-        .then(data => setProducts(data))
+        .then(res => setProducts(res.data || []))
     }, [seller]);
     
     const columns: GridColDef[] = [

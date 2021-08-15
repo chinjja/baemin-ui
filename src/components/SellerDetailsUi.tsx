@@ -13,7 +13,7 @@ export default function SellerDetailsUi(props: SellerDetailsUiProps) {
 
     useEffect(() => {
         getProducts(props.seller)
-        .then(data => setProducts(data))
+        .then(res => setProducts(res.data || []))
     });
 
     const productList = products?.map((product, index) =>

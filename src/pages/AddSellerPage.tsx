@@ -21,8 +21,8 @@ export default function AddSellerPage() {
         e.preventDefault();
             
         newSeller(account, data)
-        .then(seller => {
-            history.replace("/seller", seller);
+        .then(res => {
+            history.replace("/seller", res.data);
         })
         .catch(reason => {
             alert(reason.message);

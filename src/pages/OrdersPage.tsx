@@ -11,7 +11,7 @@ export default function OrdersPage() {
 
     useEffect(() => {
         getOrders(account)
-        .then(orders => setOrders(orders))
+        .then(res => setOrders(res.data || []))
         .catch(reason => alert(reason.message))
     }, [account])
     
