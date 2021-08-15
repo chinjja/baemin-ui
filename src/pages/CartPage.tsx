@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, Typography } from "@material-ui/core";
 import { useHistory, useLocation } from "react-router-dom";
-import { Account, AccountProduct, buy, getAccountProducts } from "../baemin/Baemin"
+import { Account, AccountProduct, buy, deleteAccountProduct, getAccountProducts } from "../baemin/Baemin"
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
 
 export default function CartPage() {
@@ -9,36 +9,58 @@ export default function CartPage() {
     const location = useLocation();
     const account = location.state as Account;
     const [products, setProducts] = useState<AccountProduct[]>([]);
-
-    useEffect(() => {
+    
+    const loadProducts = useCallback(() => {
         getAccountProducts(account)
         .then(res => {
             setProducts(res.data || []);
         })
         .catch(reason => alert(reason.message))
-    }, [account]);
-    
+    }, [account])
+
+    useEffect(() => {
+        loadProducts();
+    }, [loadProducts]);
+
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', hide: true },
         { field: 'title', headerName: 'Title', flex: 1 },
         { field: 'description', headerName: 'Description', flex: 1 },
         { field: 'price', headerName: 'Price', type: 'number', flex: 1 },
         { field: 'quantity', headerName: 'Quantity', type: 'number', flex: 1 },
+        {
+            field: 'delete',
+            headerName: ' ',
+            sortable: false,
+            renderCell: (params) => (
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={()=>{handleDelete(params.row as any)}}>
+                    Delete
+            </Button>
+        )
+        }
     ]
 
     const rows = products.map(row => {
         return {
-            id: row.id,
-            title: row.product.info.title,
-            description: row.product.info.description,
-            price: row.product.info.price,
-            quantity: row.quantity,
+            ...row.product.info,
+            ...row,
         }
     })
 
     const handleBuy = () => {
         buy(account)
         .then(res => history.push("/order", res.data!))
+        .catch(reason => alert(reason.message))
+    }
+
+    const handleDelete = (entity: AccountProduct) => {
+        deleteAccountProduct(entity)
+        .then(res => {
+            loadProducts();
+        })
         .catch(reason => alert(reason.message))
     }
 

@@ -198,8 +198,8 @@ export async function newProduct(seller: Seller, data: ProductInfo): Promise<Res
 
 export async function updateProduct(product: Product, info: ProductInfo): Promise<ResponseEntity<Product>> {
     return instance.patch(`/products/${product.id}`, info);
-
 }
+
 export async function getProduct(id: number): Promise<ResponseEntity<Product>> {
     return instance.get(`/products/${id}`);
 }
@@ -232,6 +232,10 @@ export async function cancel(order: Order): Promise<ResponseEntity<Order>> {
 
 export async function complete(order: Order): Promise<ResponseEntity<Order>> {
     return instance.patch(`/orders/${order.id}/complete`);
+}
+
+export async function deleteAccountProduct(entity: AccountProduct): Promise<ResponseEntity<void>> {
+    return instance.delete(`/account-products/${entity.id}`);
 }
 
 export async function getAccountProducts(account: Account): Promise<ResponseEntity<AccountProduct[]>> {
