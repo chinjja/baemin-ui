@@ -42,7 +42,7 @@ export default function TopBar() {
     signinLink = <Link component={Nav} to="/signin" variant="button" color="inherit" className={classes.link}>Sign-in</Link>
   }
     return (
-    <AppBar position="static">
+    <AppBar position="sticky">
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <Menu />
