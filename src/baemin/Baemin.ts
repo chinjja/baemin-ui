@@ -1,5 +1,5 @@
 import axios from 'axios'
-import jwt, { JwtPayload } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 
 const instance = axios.create({
     baseURL: 'http://localhost:8080/api',
