@@ -82,6 +82,7 @@ export default function CartPage() {
                 pageSize={5}
                 rowsPerPageOptions={[5, 10, 25, 50, 100]}
                 disableColumnMenu
+                disableSelectionOnClick
                 onCellEditCommit={e=>{
                     handleUpdate((e as any).row, {
                         [e.field]: +e.value!
