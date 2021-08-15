@@ -29,12 +29,8 @@ export default function SellerPage() {
 
     const rows = products.map(row => {
         return {
-            id: row.id,
-            code: row.info.code,
-            title: row.info.title,
-            description: row.info.description,
-            price: row.info.price,
-            quantity: row.info.quantity,
+            ...row.info,
+            ...row,
         }
     })
 

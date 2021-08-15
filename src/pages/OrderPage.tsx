@@ -35,10 +35,8 @@ export default function OrderPage() {
 
     const rows = products.map(row => {
         return {
-            id: row.id,
-            title: row.product.info.title,
-            price: row.product.info.price,
-            quantity: row.quantity,
+            ...row.product.info,
+            ...row,
         }
     })
 

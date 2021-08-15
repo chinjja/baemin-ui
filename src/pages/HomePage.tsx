@@ -24,18 +24,16 @@ export default function HomePage() {
     }
     
     const columns: GridColDef[] = [
-        { field: 'title', headerName: 'Title', flex: 1},
+        { field: 'name', headerName: 'Name', flex: 1},
         { field: 'description', headerName: 'Description', flex: 1 },
         { field: 'seller', headerName: 'Seller', flex: 1 },
     ]
 
     const rows = sellers.map(row => {
         return {
-            id: row.id,
-            title: row.info.name,
-            description: row.info.description,
+            ...row.info,
+            ...row,
             seller: row.account.name,
-            value: row,
         }
     })
 
@@ -48,7 +46,7 @@ export default function HomePage() {
                 rows={rows}
                 pageSize={5}
                 rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                onRowClick={e=>history.push("/seller", e.row.value)}
+                onRowClick={e=>history.push("/seller", e.row)}
                 disableSelectionOnClick
                 disableColumnMenu
                 />

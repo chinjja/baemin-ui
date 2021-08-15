@@ -17,16 +17,13 @@ export default function OrdersPage() {
     
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', flex: 1 },
-        { field: 'date', headerName: 'Date', flex: 1},
+        { field: 'createdAt', headerName: 'Date', flex: 1},
         { field: 'status', headerName: 'Status', flex: 1 },
     ]
 
     const rows = orders.map(row => {
         return {
-            id: row.id,
-            date: row.createdAt,
-            status: row.status,
-            value: row,
+            ...row,
         }
     })
 
@@ -37,7 +34,7 @@ export default function OrdersPage() {
             rows={rows}
             pageSize={5}
             rowsPerPageOptions={[5, 10, 25, 50, 100]}
-            onRowClick={e=>history.push("/order", e.row.value)}
+            onRowClick={e=>history.push("/order", e.row)}
             disableSelectionOnClick
             disableColumnMenu
             />
