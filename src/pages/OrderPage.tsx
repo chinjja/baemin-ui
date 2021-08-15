@@ -12,19 +12,19 @@ export default function OrderPage() {
     useEffect(() => {
         getOrderProducts(order)
         .then(res => setProducts(res.data || []))
-        .catch(reason => alert(reason.message))
+        .catch(reason => alert(reason))
     }, [order])
 
     const handleComplete = () => {
         complete(order)
         .then(res => setOrder(res.data!))
-        .catch(reason => alert(reason.message))
+        .catch(reason => alert(reason))
     }
 
     const handleCancel = () => {
         cancel(order)
         .then(res => setOrder(res.data!))
-        .catch(reason => alert(reason.message))
+        .catch(reason => alert(reason))
     }
 
     const columns: GridColDef[] = [

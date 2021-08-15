@@ -25,7 +25,7 @@ export default function AddSellerPage() {
             history.replace("/seller", res.data);
         })
         .catch(reason => {
-            alert(reason.message);
+            alert(reason);
         })
     };
 

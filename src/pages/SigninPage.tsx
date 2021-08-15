@@ -22,7 +22,7 @@ export default function SigninPage() {
             history.goBack();
         })
         .catch(reason => {
-            alert(reason.message);
+            alert(reason);
         })
     }
 

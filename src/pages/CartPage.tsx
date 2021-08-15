@@ -15,7 +15,7 @@ export default function CartPage() {
         .then(res => {
             setProducts(res.data || []);
         })
-        .catch(reason => alert(reason.message))
+        .catch(reason => alert(reason))
     }, [account])
 
     useEffect(() => {
@@ -53,7 +53,7 @@ export default function CartPage() {
     const handleBuy = () => {
         buy(account)
         .then(res => history.push("/order", res.data!))
-        .catch(reason => alert(reason.message))
+        .catch(reason => alert(reason))
     }
 
     const handleDelete = (entity: AccountProduct) => {
@@ -61,7 +61,7 @@ export default function CartPage() {
         .then(res => {
             loadProducts();
         })
-        .catch(reason => alert(reason.message))
+        .catch(reason => alert(reason))
     }
 
     const handleUpdate = (entity: AccountProduct, data: AccountProductUpdateDto) => {
@@ -69,7 +69,7 @@ export default function CartPage() {
         .then(res => {
             loadProducts();
         })
-        .catch(reason => alert(reason.message))
+        .catch(reason => alert(reason))
     }
 
     return (

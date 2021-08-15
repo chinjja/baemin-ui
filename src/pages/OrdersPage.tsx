@@ -13,7 +13,7 @@ export default function OrdersPage() {
     useEffect(() => {
         getOrders(account)
         .then(res => setOrders(res.data || []))
-        .catch(reason => alert(reason.message))
+        .catch(reason => alert(reason))
     }, [account])
     
     const columns: GridColDef[] = [

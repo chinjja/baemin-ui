@@ -27,7 +27,7 @@ export default function SignupPage() {
                 history.goBack();
             })
             .catch(reason => {
-                alert(reason.message);
+                alert(reason);
             })
         }
         else {

@@ -15,7 +15,7 @@ export default function HomePage() {
             setSellers(res.data || []);
         })
         .catch(reason => {
-            alert(reason.message);
+            alert(reason);
         })
     }, []);
 
