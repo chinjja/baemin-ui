@@ -35,11 +35,11 @@ export default function AddProductPage() {
             </Box>
             <form onSubmit={handleCreate}>
                 <Box mb={1}>
-                    <TextField name="code" label="Code" onChange={onChange} fullWidth/>
-                    <TextField name="title" label="Title" onChange={onChange} fullWidth/>
-                    <TextField name="description" label="Description" onChange={onChange} fullWidth/>
-                    <TextField name="price" type="number" label="Price" onChange={onChange} fullWidth/>
-                    <TextField name="quantity" type="number" label="Quantity" onChange={onChange} fullWidth/>
+                    <TextField autoFocus required name="code" label="Code" onChange={onChange} fullWidth/>
+                    <TextField required name="title" label="Title" onChange={onChange} fullWidth/>
+                    <TextField required name="description" label="Description" onChange={onChange} fullWidth/>
+                    <TextField required name="price" type="number" label="Price" onChange={onChange} fullWidth/>
+                    <TextField required name="quantity" type="number" label="Quantity" onChange={onChange} fullWidth/>
                 </Box>
                 <Button type="submit" variant="outlined">Create</Button>
             </form>

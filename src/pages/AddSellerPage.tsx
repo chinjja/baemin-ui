@@ -37,8 +37,8 @@ export default function AddSellerPage() {
             </Box>
             <form onSubmit={handleSubmit}>
                 <Box mb={1}>
-                    <TextField name="name" label="Name" onChange={onChange} fullWidth/>
-                    <TextField name="description" label="Description" onChange={onChange} fullWidth/>
+                    <TextField autoFocus required name="name" label="Name" onChange={onChange} fullWidth/>
+                    <TextField required name="description" label="Description" onChange={onChange} fullWidth/>
                 </Box>
                 <Button type="submit" variant="outlined">Create</Button>
             </form>
