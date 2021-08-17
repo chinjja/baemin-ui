@@ -34,8 +34,8 @@ export default function SigninPage() {
             </Box>
             <form onSubmit={handleSignin}>
                 <Box mb={1}>
-                    <TextField autoFocus required name="email" type="email" label="Email" onChange={onChange} fullWidth/>
-                    <TextField required name="password" type="password" label="Password" onChange={onChange} fullWidth/>
+                    <TextField autoComplete="username" autoFocus required name="email" type="email" label="Email" onChange={onChange} fullWidth/>
+                    <TextField autoComplete="current-password" required name="password" type="password" label="Password" onChange={onChange} fullWidth/>
                 </Box>
                 <Button type="submit" variant="outlined">Sign in</Button>
             </form>
