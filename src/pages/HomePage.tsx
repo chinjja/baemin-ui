@@ -1,26 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Box, Button, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import { getCurrentAccount, getSellers, Seller } from "../baemin/Baemin"
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
+import { useAccount, useSellers } from "../baemin/BaeminHooks";
 
 export default function HomePage() {
     const history = useHistory();
-    const [sellers, setSellers] = useState<Seller[]>([]);
-    const account = getCurrentAccount();
-
-    useEffect(() => {
-        getSellers()
-        .then(res => {
-            setSellers(res.data || []);
-        })
-        .catch(reason => {
-            alert(reason);
-        })
-    }, []);
+    const account = useAccount();
+    const sellers = useSellers();
 
     const handleAddSeller = () => {
-        history.push("/seller/add", account!);
+        history.push("/seller/add"!);
     }
     
     const columns: GridColDef[] = [

@@ -1,19 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { cancel, complete, getOrderProducts, Order, OrderProduct } from "../baemin/Baemin";
+import { cancel, complete, Order } from "../baemin/Baemin";
 import { Box, Button, Divider, Typography } from "@material-ui/core";
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
+import { useOrderProducts } from "../baemin/BaeminHooks";
 
 export default function OrderPage() {
     const location = useLocation();
     const [order, setOrder] = useState(location.state as Order);
-    const [products, setProducts] = useState<OrderProduct[]>([]);
-
-    useEffect(() => {
-        getOrderProducts(order)
-        .then(res => setProducts(res.data || []))
-        .catch(reason => alert(reason))
-    }, [order])
+    const products = useOrderProducts(order);
 
     const handleComplete = () => {
         complete(order)

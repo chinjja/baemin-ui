@@ -1,11 +1,11 @@
 import React from "react";
 import { Box, Button, Divider, Grid, TextField, Typography } from "@material-ui/core";
 import { useHistory, Redirect } from "react-router-dom";
-import {  getCurrentAccount } from "../baemin/Baemin";
+import { useAccount } from "../baemin/BaeminHooks";
 
 export default function MyPage() {
     const history = useHistory();
-    const account = getCurrentAccount();
+    const account = useAccount();
     if(account) {
         const handleCart = (e: any) => {
             history.push("/cart", account);

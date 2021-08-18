@@ -1,22 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Button } from "@material-ui/core";
 import { useHistory, useLocation } from "react-router-dom";
-import { Account, addToCart, getCurrentAccount, getProducts, Product, Seller } from "../baemin/Baemin"
+import { addToCart,  Seller } from "../baemin/Baemin"
 import SellerUi from "../components/SellerUi";
 import { DataGrid, GridColDef, GridRowId } from "@material-ui/data-grid";
+import { useAccount, useProducts } from "../baemin/BaeminHooks";
 
 export default function SellerPage() {
     const history = useHistory();
     const location = useLocation();
     const seller = location.state as Seller;
-    const [products, setProducts] = useState<Product[]>([]);
+    const products = useProducts(seller);
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
-    const account = getCurrentAccount();
-    
-    useEffect(() => {
-        getProducts(seller)
-        .then(res => setProducts(res.data || []))
-    }, [seller]);
+    const account = useAccount();
     
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', hide: true },

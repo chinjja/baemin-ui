@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link as Nav, useHistory } from 'react-router-dom';
 import { AppBar, Button, IconButton, Toolbar, Typography, makeStyles, Link } from '@material-ui/core';
 import { Menu } from '@material-ui/icons';
-import { Account, addSigninListener, initSign, removeSigninListener, signout } from './baemin/Baemin';
+import { signout } from './baemin/Baemin';
+import { useAccount } from './baemin/BaeminHooks';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,14 +23,8 @@ const useStyles = makeStyles((theme) => ({
 export default function TopBar() {
     const classes = useStyles();
     const history = useHistory();
-    const [account, setAccount] = useState<Account>();
-    useEffect(() => {
-        initSign();
-        addSigninListener(setAccount);
-        return ()=> {
-          removeSigninListener(setAccount);
-        }
-      }, []);
+    const account = useAccount();
+    
   let signinLink: any;
   let signoutLink: any;
   let signupLink: any;

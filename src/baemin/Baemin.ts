@@ -81,11 +81,11 @@ export interface OrderProduct {
     quantity: number,
 }
 
-interface Current {
+interface UserInfo {
     account: Account;
     token: string;
 }
-let current: Current | undefined;
+let current: UserInfo | undefined;
 
 export function getCurrentAccount(): Account | undefined {
     return current?.account;
@@ -113,12 +113,9 @@ function fireSigninListeners(account: Account | undefined) {
 
 const userInfoKey = "userInfo";
 
-interface UserInfo {
-    id: number,
-    token: string,
-}
+initSign();
 
-export async function initSign() {
+function initSign() {
     const userInfo = localStorage.getItem(userInfoKey);
     if(userInfo) {
         const info = JSON.parse(userInfo) as UserInfo;
@@ -128,17 +125,8 @@ export async function initSign() {
             return;
         }
 
-        const response = await getAccount(info.id);
-
-        if(!response.data) {
-            return;
-        }
-        current ={
-            account: response.data,
-            token: info.token,
-        }
+        current = info;
         instance.defaults.headers.common['Authorization'] = 'Bearer ' + info.token;
-        fireSigninListeners(current.account);
     }
 }
 
@@ -161,10 +149,7 @@ export async function signin(data: SignIn): Promise<Account> {
         account: account,
         token: token,
     }
-    localStorage.setItem(userInfoKey, JSON.stringify({
-        id: id,
-        token: token,
-    }));
+    localStorage.setItem(userInfoKey, JSON.stringify(current));
     fireSigninListeners(current.account);
     return account;
 }
@@ -192,8 +177,11 @@ export async function getSeller(id: number): Promise<ResponseEntity<Seller>> {
     return instance.get(`/sellers/${id}`);
 }
 
-export async function getSellers(): Promise<ResponseEntity<Seller[]>> {
-    return await instance.get('/sellers');
+export async function getSellers(account?: Account): Promise<ResponseEntity<Seller[]>> {
+    if(account) {
+        return instance.get(`/accounts/${account.id}/sellers`);
+    }
+    return instance.get('/sellers');
 }
 
 export async function newProduct(seller: Seller, data: ProductInfo): Promise<ResponseEntity<Product>> {

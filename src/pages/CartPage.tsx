@@ -1,26 +1,14 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import { Box, Button, Typography } from "@material-ui/core";
-import { useHistory, useLocation } from "react-router-dom";
-import { Account, AccountProduct, AccountProductUpdateDto, buy, deleteAccountProduct, getAccountProducts, updateAccountProduct } from "../baemin/Baemin"
+import { useHistory } from "react-router-dom";
+import { AccountProduct, AccountProductUpdateDto, buy, deleteAccountProduct, updateAccountProduct } from "../baemin/Baemin"
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
+import { useAccount, useAccountProducts } from "../baemin/BaeminHooks";
 
 export default function CartPage() {
     const history = useHistory();
-    const location = useLocation();
-    const account = location.state as Account;
-    const [products, setProducts] = useState<AccountProduct[]>([]);
-    
-    const loadProducts = useCallback(() => {
-        getAccountProducts(account)
-        .then(res => {
-            setProducts(res.data || []);
-        })
-        .catch(reason => alert(reason))
-    }, [account])
-
-    useEffect(() => {
-        loadProducts();
-    }, [loadProducts]);
+    const account = useAccount()!;
+    const products = useAccountProducts(account);
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', hide: true },
@@ -58,17 +46,11 @@ export default function CartPage() {
 
     const handleDelete = (entity: AccountProduct) => {
         deleteAccountProduct(entity)
-        .then(res => {
-            loadProducts();
-        })
         .catch(reason => alert(reason))
     }
 
     const handleUpdate = (entity: AccountProduct, data: AccountProductUpdateDto) => {
         updateAccountProduct(entity, data)
-        .then(res => {
-            loadProducts();
-        })
         .catch(reason => alert(reason))
     }
 
