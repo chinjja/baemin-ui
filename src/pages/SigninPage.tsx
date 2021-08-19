@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Divider, TextField, Typography } from "@material-ui/core";
+import { Box, Button, Divider, Grid, TextField, Typography } from "@material-ui/core";
 import { SignIn, signin } from "../baemin/Baemin";
 import { useHistory } from "react-router-dom";
 
@@ -29,15 +29,21 @@ export default function SigninPage() {
     return (
         <>
             <Typography variant="h6">Sign in</Typography>
-            <Box my={1}>
+            <Box my={2}>
                 <Divider/>
             </Box>
             <form onSubmit={handleSignin}>
-                <Box mb={1}>
-                    <TextField autoComplete="username" autoFocus required name="email" type="email" label="Email" onChange={onChange} fullWidth/>
-                    <TextField autoComplete="current-password" required name="password" type="password" label="Password" onChange={onChange} fullWidth/>
+                <Box mb={2}>
+                    <Grid container direction="column" spacing={1}>
+                        <Grid item>
+                            <TextField autoComplete="username" variant="outlined" autoFocus required name="email" type="email" label="Email" onChange={onChange} fullWidth/>
+                        </Grid>
+                        <Grid item>
+                            <TextField autoComplete="current-password" variant="outlined" required name="password" type="password" label="Password" onChange={onChange} fullWidth/>
+                        </Grid>
+                    </Grid>
                 </Box>
-                <Button type="submit" variant="outlined">Sign in</Button>
+                <Button type="submit" variant="contained" color="primary">Sign in</Button>
             </form>
         </>
     )

@@ -8,9 +8,9 @@ interface OrdersPageProps extends PrivateRouteProps {
 }
 
 export default function OrdersPage(props: OrdersPageProps) {
+    const auth = props.auth;
     const history = useHistory();
-    const account = props.account;
-    const orders = useOrders(account);
+    const orders = useOrders(auth);
     
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', flex: 1 },
@@ -27,13 +27,11 @@ export default function OrdersPage(props: OrdersPageProps) {
     return (
         <>
             <Typography variant="h6">List of order</Typography>
-            <Box my={1}>
+            <Box my={2}>
                 <DataGrid
                     autoHeight
                     columns={columns}
                     rows={rows}
-                    pageSize={5}
-                    rowsPerPageOptions={[5, 10, 25, 50, 100]}
                     onRowClick={e=>history.push("/order", e.row)}
                     disableSelectionOnClick
                     disableColumnMenu

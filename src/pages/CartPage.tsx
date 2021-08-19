@@ -9,18 +9,18 @@ interface CartPageProps extends PrivateRouteProps {
 }
 
 export default function CartPage(props: CartPageProps) {
+    const auth = props.auth;
     const history = useHistory();
-    const account = props.account;
     const [products, setProducts] = useState<AccountProduct[]>([]);
     
     useEffect(() => {
-        getAccountProducts(account)
+        getAccountProducts(auth)
         .then(res => setProducts(res.data || []))
         .catch(reason => alert(reason))
-    }, [account]);
+    }, [auth]);
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', hide: true },
+        { field: 'seller', headerName: 'Seller', flex: 1 },
         { field: 'title', headerName: 'Title', flex: 1 },
         { field: 'description', headerName: 'Description', flex: 1 },
         { field: 'price', headerName: 'Price', type: 'number', flex: 1 },
@@ -44,11 +44,12 @@ export default function CartPage(props: CartPageProps) {
         return {
             ...row.product.info,
             ...row,
+            seller: row.product.seller.info.name,
         }
     })
 
     const handleBuy = () => {
-        buy(account)
+        buy(auth)
         .then(res => history.push("/order", res.data!))
         .catch(reason => alert(reason))
     }
@@ -72,13 +73,11 @@ export default function CartPage(props: CartPageProps) {
     return (
         <>
             <Typography variant="h6">Cart</Typography>
-            <Box my={1}>
+            <Box my={2}>
                 <DataGrid
                     autoHeight
                     columns={columns}
                     rows={rows}
-                    pageSize={5}
-                    rowsPerPageOptions={[5, 10, 25, 50, 100]}
                     disableColumnMenu
                     disableSelectionOnClick
                     onCellEditCommit={e=>{
@@ -88,7 +87,7 @@ export default function CartPage(props: CartPageProps) {
                     }}
                     />
             </Box>
-            <Button variant="outlined" onClick={handleBuy}>Buy</Button>
+            <Button variant="contained" color="primary" onClick={handleBuy}>Buy</Button>
         </>
     );
 }

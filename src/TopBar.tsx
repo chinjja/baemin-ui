@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link as Nav, useHistory } from 'react-router-dom';
-import { AppBar, Button, IconButton, Toolbar, Typography, makeStyles, Link } from '@material-ui/core';
+import { AppBar, Button, IconButton, Toolbar, makeStyles, Link } from '@material-ui/core';
 import { Menu } from '@material-ui/icons';
 import { signout } from './baemin/Baemin';
-import { useAccount } from './baemin/BaeminHooks';
+import { useAuth } from './baemin/BaeminHooks';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,13 +23,13 @@ const useStyles = makeStyles((theme) => ({
 export default function TopBar() {
     const classes = useStyles();
     const history = useHistory();
-    const account = useAccount();
+    const auth = useAuth();
     
   let signinLink: any;
   let signoutLink: any;
   let signupLink: any;
-  if(account) {
-    signinLink = <Link component={Nav} to="/me" variant="button" color="inherit" className={classes.link}>{account.name}</Link>
+  if(auth) {
+    signinLink = <Link component={Nav} to="/account" variant="button" color="inherit" className={classes.link}>{auth.name}</Link>
     signoutLink = <Button color="inherit" onClick={()=>{signout(); history.replace("/")}}>Sign-out</Button>
  }
   else {
@@ -42,10 +42,9 @@ export default function TopBar() {
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <Menu />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
+          <Link component={Nav} to="/" variant="h6" color="inherit" className={classes.title}>
             BAEMIN
-          </Typography>
-          <Link component={Nav} to="/" variant="button" color="inherit" className={classes.link}>Home</Link>
+          </Link>
           {signupLink}
           {signinLink}
           {signoutLink}

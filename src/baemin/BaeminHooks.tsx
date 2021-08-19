@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Redirect, Route } from 'react-router-dom';
 import { Account, AccountProduct, addSigninListener, getAccountProducts, getCurrentAccount, getOrderProducts, getOrders, getProducts, getSellers, Order, OrderProduct, Product, removeSigninListener, Seller } from './Baemin'
 
-export function useAccount() {
+export function useAuth() {
     const [account, setAccount] = useState(getCurrentAccount());
     
     useEffect(() => {
@@ -74,16 +74,16 @@ export function useOrderProducts(order: Order) {
 }
 
 export interface PrivateRouteProps {
-    account: Account;
+    auth: Account;
 }
 
 export function PrivateRoute({component: Component, ...rest}: any) {
-    const account = useAccount();
+    const account = useAuth();
 
     return (
         <Route
         {...rest}
-        render={props => account ? <Component { ...props} account={account} /> : <Redirect to="/signin"/>}
+        render={props => account ? <Component { ...props} auth={account} /> : <Redirect to="/signin"/>}
         />
     )
 }

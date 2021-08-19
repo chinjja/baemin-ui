@@ -195,6 +195,10 @@ export async function newSeller(account: Account, data: SellerInfo): Promise<Res
     return instance.post(`/accounts/${account.id}/sellers`, data);
 }
 
+export async function updateSeller(seller: Seller, data: SellerInfo): Promise<ResponseEntity<Seller>> {
+    return instance.patch(`/sellers/${seller.id}`, data);
+}
+
 export async function getSeller(id: number): Promise<ResponseEntity<Seller>> {
     return instance.get(`/sellers/${id}`);
 }
