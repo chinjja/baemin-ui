@@ -40,6 +40,18 @@ export interface Account {
     name: string;
 }
 
+export interface Address {
+    id:number;
+    account: Account;
+    master: boolean;
+    info: AddressInfo;
+}
+
+export interface AddressInfo {
+    city?: string;
+    street?: string;
+}
+
 export interface SellerInfo {
     name?: string;
     description?: string;
@@ -189,6 +201,14 @@ export async function newAccount(data: NewAccount): Promise<ResponseEntity<Accou
 
 export async function getAccount(id: number): Promise<ResponseEntity<Account>> {
     return instance.get(`/accounts/${id}`);
+}
+
+export async function newAddress(account: Account, data: AddressInfo): Promise<ResponseEntity<Address>> {
+    return instance.post(`/accounts/${account.id}/addresses`, data);
+}
+
+export async function getAddresses(account: Account): Promise<ResponseEntity<Address[]>> {
+    return instance.get(`/accounts/${account.id}/addresses`);
 }
 
 export async function newSeller(account: Account, data: SellerInfo): Promise<ResponseEntity<Seller>> {

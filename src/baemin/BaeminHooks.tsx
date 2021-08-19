@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Redirect, Route } from 'react-router-dom';
-import { Account, AccountProduct, addSigninListener, getAccountProducts, getCurrentAccount, getOrderProducts, getOrders, getProducts, getSellers, Order, OrderProduct, Product, removeSigninListener, Seller } from './Baemin'
+import { Account, AccountProduct, Address, addSigninListener, getAccountProducts, getAddresses, getCurrentAccount, getOrderProducts, getOrders, getProducts, getSellers, Order, OrderProduct, Product, removeSigninListener, Seller } from './Baemin'
 
 export function useAuth() {
     const [account, setAccount] = useState(getCurrentAccount());
@@ -12,6 +12,18 @@ export function useAuth() {
         }
     }, [])
     return account;
+}
+
+export function useAddresses(account: Account) {
+    const [list, setList] = useState<Address[]>([]);
+    
+    useEffect(() => {
+        getAddresses(account)
+        .then(res => setList(res.data || []))
+        .catch(reason => alert(reason))
+    }, [account]);
+
+    return list;
 }
 
 export function useAccountProducts(account: Account) {

@@ -44,6 +44,9 @@ export default function AccountPage(props: AccountPageProps) {
                 <Grid item>
                     <Button variant="contained" color="primary" onClick={() => history.push("/account/sellers")}>Sellers</Button>
                 </Grid>
+                <Grid item>
+                    <Button variant="contained" color="primary" onClick={() => history.push("/account/addresses")}>Addresses</Button>
+                </Grid>
             </Grid>
         </>
     );
