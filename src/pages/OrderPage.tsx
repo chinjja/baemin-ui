@@ -43,7 +43,7 @@ export default function OrderPage() {
             </Box>
             <Typography variant="body2">{order.id}</Typography>
             <Typography variant="body2">{order.status}</Typography>
-            <Typography variant="body2">{order.createdAt}</Typography>
+            <Typography variant="body2">{order.createdAt.toLocaleString()}</Typography>
             <Typography variant="body2">{order.account.email}</Typography>
             <Box my={1}>
                 <DataGrid

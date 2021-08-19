@@ -14,7 +14,7 @@ export default function OrdersPage(props: OrdersPageProps) {
     
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', flex: 1 },
-        { field: 'createdAt', headerName: 'Date', flex: 1},
+        { field: 'createdAt', headerName: 'Date', type: 'dateTime', flex: 1},
         { field: 'status', headerName: 'Status', flex: 1 },
     ]
 
