@@ -73,13 +73,17 @@ export function useOrderProducts(order: Order) {
     return products;
 }
 
+export interface PrivateRouteProps {
+    account: Account;
+}
+
 export function PrivateRoute({component: Component, ...rest}: any) {
     const account = useAccount();
 
     return (
         <Route
         {...rest}
-        render={props => account ? <Component {...props} /> : <Redirect to="/signin"/>}
+        render={props => account ? <Component { ...props} account={account} /> : <Redirect to="/signin"/>}
         />
     )
 }

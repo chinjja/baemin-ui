@@ -1,11 +1,14 @@
 import React from "react";
 import { Box, Button, Divider, Grid, TextField, Typography } from "@material-ui/core";
 import { useHistory, Redirect } from "react-router-dom";
-import { useAccount } from "../baemin/BaeminHooks";
+import { PrivateRouteProps } from "../baemin/BaeminHooks";
 
-export default function MyPage() {
+interface MyPageProps extends PrivateRouteProps {
+}
+
+export default function MyPage(props: MyPageProps) {
     const history = useHistory();
-    const account = useAccount();
+    const account = props.account;
     if(account) {
         const handleCart = (e: any) => {
             history.push("/cart", account);

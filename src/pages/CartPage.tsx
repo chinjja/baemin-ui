@@ -3,11 +3,14 @@ import { Box, Button, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { AccountProduct, AccountProductUpdateDto, buy, deleteAccountProduct, updateAccountProduct } from "../baemin/Baemin"
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
-import { useAccount, useAccountProducts } from "../baemin/BaeminHooks";
+import { PrivateRouteProps, useAccountProducts } from "../baemin/BaeminHooks";
 
-export default function CartPage() {
+interface CartPageProps extends PrivateRouteProps {
+}
+
+export default function CartPage(props: CartPageProps) {
     const history = useHistory();
-    const account = useAccount()!;
+    const account = props.account;
     const products = useAccountProducts(account);
 
     const columns: GridColDef[] = [

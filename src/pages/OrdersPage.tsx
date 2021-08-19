@@ -1,14 +1,15 @@
 import React from "react";
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
-import { useHistory, useLocation } from "react-router-dom";
-import { Account } from "../baemin/Baemin";
+import { useHistory } from "react-router-dom";
 import { Box, Typography } from "@material-ui/core";
-import { useOrders } from "../baemin/BaeminHooks";
+import { PrivateRouteProps, useOrders } from "../baemin/BaeminHooks";
 
-export default function OrdersPage() {
+interface OrdersPageProps extends PrivateRouteProps {
+}
+
+export default function OrdersPage(props: OrdersPageProps) {
     const history = useHistory();
-    const location = useLocation();
-    const account = location.state as Account;
+    const account = props.account;
     const orders = useOrders(account);
     
     const columns: GridColDef[] = [

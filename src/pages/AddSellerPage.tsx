@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { Box, Button, Divider, TextField, Typography } from '@material-ui/core'
-import { useHistory, useLocation } from 'react-router-dom'
-import { Account, newSeller, SellerInfo } from '../baemin/Baemin';
+import { useHistory } from 'react-router-dom'
+import { newSeller, SellerInfo } from '../baemin/Baemin';
+import { PrivateRouteProps } from '../baemin/BaeminHooks';
 
-export default function AddSellerPage() {
+interface AddSellerPageProps extends PrivateRouteProps {
+
+}
+export default function AddSellerPage(props: AddSellerPageProps) {
     const history = useHistory();
-    const location = useLocation();
-    
-    const account = location.state as Account;
+    const account = props.account;
     const [data, setData] = useState<SellerInfo>({});
 
     const onChange = (e: any) => {
