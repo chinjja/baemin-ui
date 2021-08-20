@@ -43,10 +43,10 @@ export interface Account {
 export interface Address extends AddressInfo {
     id:number;
     account: Account;
-    master: boolean;
 }
 
 export interface AddressInfo {
+    master?: boolean;
     city?: string;
     street?: string;
 }
@@ -202,6 +202,14 @@ export async function getAccount(id: number): Promise<ResponseEntity<Account>> {
 
 export async function newAddress(account: Account, data: AddressInfo): Promise<ResponseEntity<Address>> {
     return instance.post(`/accounts/${account.id}/addresses`, data);
+}
+
+export async function updateAddress(address: Address, data: AddressInfo): Promise<ResponseEntity<Address>> {
+    return instance.patch(`/addresses/${address.id}`, data);
+}
+
+export async function getMasterAddress(account: Account): Promise<ResponseEntity<Address>> {
+    return instance.get(`/accounts/${account.id}/addresses/master`);
 }
 
 export async function getAddresses(account: Account): Promise<ResponseEntity<Address[]>> {

@@ -35,7 +35,7 @@ export default function AddressesPage(props: AddressesPageProps) {
                     rows={rows}
                     disableColumnMenu
                     disableSelectionOnClick
-                    onRowClick={e=>history.push("/address", e.row)}
+                    onRowClick={e=>history.push("/account/address", e.row)}
                     />
             </Box>
             <Button variant="contained" color="primary" onClick={()=>history.push("/account/address/add")}>Add Address</Button>

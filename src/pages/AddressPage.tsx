@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Address } from "../baemin/Baemin";
-import { Box, Divider, Grid, TextField, Typography } from "@material-ui/core";
+import { Box, Checkbox, Divider, Grid, TextField, Typography } from "@material-ui/core";
 
 export default function AddressPage() {
     const location = useLocation();
@@ -17,7 +17,7 @@ export default function AddressPage() {
             <Box my={2}>
                 <Grid container direction="column" spacing={1}>
                     <Grid item>
-                        <TextField fullWidth label="Master" variant="outlined" defaultValue={address.master} InputProps={{readOnly: true}}></TextField>
+                        <Checkbox defaultChecked={address.master} color="primary" readOnly/>
                     </Grid>
                     <Grid item>
                         <TextField fullWidth label="City" variant="outlined" defaultValue={address.city} InputProps={{readOnly: true}}></TextField>

@@ -22,6 +22,7 @@ import InvalidPage from './pages/InvalidPage';
 import AddressPage from './pages/AddressPage';
 import AddressesPage from './pages/AddressesPage';
 import AddAddressPage from './pages/AddAddressPage';
+import AccountAddressPage from './pages/AccountAddressPage';
 
 const theme = unstable_createMuiStrictModeTheme();
 
@@ -49,6 +50,7 @@ function App() {
               <PrivateRoute exact path="/account/orders" component={OrdersPage} />
               <PrivateRoute exact path="/account/address/add" component={AddAddressPage} />
               <PrivateRoute exact path="/account/addresses" component={AddressesPage} />
+              <PrivateRoute exact path="/account/address" component={AccountAddressPage} />
               <PrivateRoute exact path="/account" component={AccountPage} />
               <Route path="/invalid" component={InvalidPage} />
               <Route component={NotFoundPage} />

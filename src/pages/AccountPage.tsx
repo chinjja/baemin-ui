@@ -1,7 +1,8 @@
 import React from "react";
 import { Box, Button, Divider, Grid, TextField, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import { PrivateRouteProps } from "../baemin/BaeminHooks";
+import { PrivateRouteProps, useMasterAddress } from "../baemin/BaeminHooks";
+import AddressView from "../components/AddressView";
 
 interface AccountPageProps extends PrivateRouteProps {
 }
@@ -9,6 +10,7 @@ interface AccountPageProps extends PrivateRouteProps {
 export default function AccountPage(props: AccountPageProps) {
     const history = useHistory();
     const auth = props.auth;
+    const masterAddress = useMasterAddress(auth);
 
     const handleModifyAccount = () => {
         
@@ -27,6 +29,12 @@ export default function AccountPage(props: AccountPageProps) {
                     </Grid>
                     <Grid item>
                         <TextField fullWidth label="Email" variant="outlined" defaultValue={auth.email}></TextField>
+                    </Grid>
+                    <Grid item>
+                        <TextField fullWidth label="Email" variant="outlined" defaultValue={auth.email}></TextField>
+                    </Grid>
+                    <Grid item>
+                        <AddressView address={masterAddress}/>
                     </Grid>
                 </Grid>
             </Box>
