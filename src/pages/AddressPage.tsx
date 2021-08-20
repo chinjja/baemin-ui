@@ -20,6 +20,9 @@ export default function AddressPage() {
                         <Checkbox defaultChecked={address.master} color="primary" readOnly/>
                     </Grid>
                     <Grid item>
+                        <TextField fullWidth label="Name" variant="outlined" defaultValue={address.name} InputProps={{readOnly: true}}></TextField>
+                    </Grid>
+                    <Grid item>
                         <TextField fullWidth label="City" variant="outlined" defaultValue={address.city} InputProps={{readOnly: true}}></TextField>
                     </Grid>
                     <Grid item>

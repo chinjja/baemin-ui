@@ -15,6 +15,7 @@ export default function AddressesPage(props: AddressesPageProps) {
 
     const columns: GridColDef[] = [
         { field: 'master', type: 'boolean', headerName: 'Master' },
+        { field: 'name', headerName: 'Name', flex: 1 },
         { field: 'city', headerName: 'City', flex: 1 },
         { field: 'street', headerName: 'Street', flex: 1 },
     ]

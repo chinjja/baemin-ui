@@ -46,6 +46,9 @@ export default function AccountAddressPage(props: AccountAddressPageProps) {
                         })}/>
                     </Grid>
                     <Grid item>
+                        <TextField name="name" fullWidth label="Name" variant="outlined" value={address.name} onChange={onChange}></TextField>
+                    </Grid>
+                    <Grid item>
                         <TextField name="city" fullWidth label="City" variant="outlined" value={address.city} onChange={onChange}></TextField>
                     </Grid>
                     <Grid item>

@@ -46,6 +46,7 @@ export interface Address extends AddressInfo {
 }
 
 export interface AddressInfo {
+    name?: string;
     master?: boolean;
     city?: string;
     street?: string;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Address } from "../baemin/Baemin";
-import { Box, Checkbox, Grid, Paper, TextField, Typography } from "@material-ui/core";
+import { Box, Checkbox, Divider, Grid, Paper, TextField, Typography } from "@material-ui/core";
 
 interface AddressViewProps {
     address?: Address,
@@ -17,6 +17,10 @@ export default function AddressView(props: AddressViewProps) {
                 <Paper variant="outlined">
                     <Grid container direction="column" spacing={1}>
                         <Box m={2}>
+                            <Typography>{address.name}</Typography>
+                            <Box mb={2}>
+                                <Divider/>
+                            </Box>
                             {showMaster && <Grid item>
                                 <Checkbox checked={address.master} color="primary" readOnly/>
                             </Grid>}
