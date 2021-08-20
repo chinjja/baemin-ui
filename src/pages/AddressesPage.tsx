@@ -21,7 +21,6 @@ export default function AddressesPage(props: AddressesPageProps) {
 
     const rows = addresses.map(row => {
         return {
-            ...row.info,
             ...row,
         }
     })

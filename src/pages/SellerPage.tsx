@@ -24,7 +24,6 @@ export default function SellerPage() {
 
     const rows = products.map(row => {
         return {
-            ...row.info,
             ...row,
         }
     })
@@ -58,10 +57,10 @@ export default function SellerPage() {
             </Box>
             <Grid container direction="column" spacing={1}>
                 <Grid item>
-                    <TextField fullWidth label="Name" variant="outlined" defaultValue={seller.info.name} InputProps={{readOnly: true}}></TextField>
+                    <TextField fullWidth label="Name" variant="outlined" defaultValue={seller.name} InputProps={{readOnly: true}}></TextField>
                 </Grid>
                 <Grid item>
-                    <TextField fullWidth label="Description" variant="outlined" defaultValue={seller.info.description} InputProps={{readOnly: true}}></TextField>
+                    <TextField fullWidth label="Description" variant="outlined" defaultValue={seller.description} InputProps={{readOnly: true}}></TextField>
                 </Grid>
             </Grid>
             <Box my={2}>

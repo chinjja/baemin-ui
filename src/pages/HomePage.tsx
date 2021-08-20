@@ -16,7 +16,6 @@ export default function HomePage() {
 
     const rows = sellers.map(row => {
         return {
-            ...row.info,
             ...row,
             seller: row.account.name,
         }

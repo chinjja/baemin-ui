@@ -24,7 +24,6 @@ export default function AccountSellersPage(props: AccountSellersPageProps) {
 
     const rows = sellers.map(row => {
         return {
-            ...row.info,
             ...row,
         }
     })

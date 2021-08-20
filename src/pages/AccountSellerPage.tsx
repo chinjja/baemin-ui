@@ -32,7 +32,6 @@ export default function AccountSellerPage(props: AccountSellerPageProps) {
 
     const rows = products.map(row => {
         return {
-            ...row.info,
             ...row,
         }
     })
@@ -66,10 +65,10 @@ export default function AccountSellerPage(props: AccountSellerPageProps) {
                         <TextField fullWidth name="id" label="ID" variant="outlined" defaultValue={seller.id} disabled></TextField>
                     </Grid>
                     <Grid item>
-                        <TextField fullWidth name="name" label="Name" variant="outlined" defaultValue={seller.info.name} onChange={onChange}></TextField>
+                        <TextField fullWidth name="name" label="Name" variant="outlined" defaultValue={seller.name} onChange={onChange}></TextField>
                     </Grid>
                     <Grid item>
-                        <TextField fullWidth name="description" label="Description" variant="outlined" defaultValue={seller.info.description} onChange={onChange}></TextField>
+                        <TextField fullWidth name="description" label="Description" variant="outlined" defaultValue={seller.description} onChange={onChange}></TextField>
                     </Grid>
                 </Grid>
             </Box>

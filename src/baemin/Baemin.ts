@@ -40,11 +40,10 @@ export interface Account {
     name: string;
 }
 
-export interface Address {
+export interface Address extends AddressInfo {
     id:number;
     account: Account;
     master: boolean;
-    info: AddressInfo;
 }
 
 export interface AddressInfo {
@@ -57,9 +56,8 @@ export interface SellerInfo {
     description?: string;
 }
 
-export interface Seller {
+export interface Seller extends SellerInfo {
     id: number;
-    info: SellerInfo;
     account: Account;
 }
 
@@ -77,10 +75,9 @@ export interface ProductInfo {
     description?: string;
 }
 
-export interface Product {
+export interface Product extends ProductInfo {
     id: number;
     seller: Seller;
-    info: ProductInfo;
 }
 
 export interface SignIn {

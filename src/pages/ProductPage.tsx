@@ -37,19 +37,19 @@ export default function ProductPage() {
             <Box my={2}>
                 <Grid container direction="column" spacing={1}>
                     <Grid item>
-                        <TextField fullWidth label="Code" variant="outlined" defaultValue={product.info.code} InputProps={inputProps}></TextField>
+                        <TextField fullWidth label="Code" variant="outlined" defaultValue={product.code} InputProps={inputProps}></TextField>
                     </Grid>
                     <Grid item>
-                        <TextField fullWidth label="Title" variant="outlined" defaultValue={product.info.title} InputProps={inputProps}></TextField>
+                        <TextField fullWidth label="Title" variant="outlined" defaultValue={product.title} InputProps={inputProps}></TextField>
                     </Grid>
                     <Grid item>
-                        <TextField fullWidth label="Description" variant="outlined" defaultValue={product.info.description} InputProps={inputProps}></TextField>
+                        <TextField fullWidth label="Description" variant="outlined" defaultValue={product.description} InputProps={inputProps}></TextField>
                     </Grid>
                     <Grid item>
-                        <TextField fullWidth label="Price" variant="outlined" defaultValue={product.info.price} InputProps={inputProps}></TextField>
+                        <TextField fullWidth label="Price" variant="outlined" defaultValue={product.price} InputProps={inputProps}></TextField>
                     </Grid>
                     <Grid item>
-                        <TextField fullWidth label="Quantity" variant="outlined" defaultValue={product.info.quantity} InputProps={inputProps}></TextField>
+                        <TextField fullWidth label="Quantity" variant="outlined" defaultValue={product.quantity} InputProps={inputProps}></TextField>
                     </Grid>
                 </Grid>
             </Box>

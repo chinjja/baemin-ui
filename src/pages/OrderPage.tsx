@@ -33,9 +33,9 @@ export default function OrderPage() {
 
     const rows = products.map(row => {
         return {
-            ...row.product.info,
+            ...row.product,
             ...row,
-            seller: row.product.seller.info.name,
+            seller: row.product.seller.name,
         }
     })
 

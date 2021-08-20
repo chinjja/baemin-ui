@@ -19,16 +19,16 @@ export default function AccountProductPage(props: AccountProductPageProps) {
     
     const handleModify = (e: any) => {
         e.preventDefault();
-        updateProduct(product, product.info)
+        updateProduct(product, product)
         .then(res => setProduct(res.data!))
         .catch(reason => alert(reason))
     }
 
     const onChange = (e: any) => {
-        product.info = {
-            ...product.info,
+        setProduct({
+            ...product,
             [e.target.name]: e.target.value
-        }
+        })
     }
     
     return (
@@ -44,19 +44,19 @@ export default function AccountProductPage(props: AccountProductPageProps) {
                             <TextField fullWidth label="ID" variant="outlined" defaultValue={product.id} InputProps={{readOnly: true}} disabled></TextField>
                         </Grid>
                         <Grid item>
-                            <TextField fullWidth name="code" label="Code" variant="outlined" defaultValue={product.info.code} InputProps={{readOnly: true}} disabled></TextField>
+                            <TextField fullWidth name="code" label="Code" variant="outlined" defaultValue={product.code} InputProps={{readOnly: true}} disabled></TextField>
                         </Grid>
                         <Grid item>
-                            <TextField fullWidth name="title" label="Title" variant="outlined" onChange={onChange} defaultValue={product.info.title}></TextField>
+                            <TextField fullWidth name="title" label="Title" variant="outlined" onChange={onChange} defaultValue={product.title}></TextField>
                         </Grid>
                         <Grid item>
-                            <TextField fullWidth name="description" label="Description" variant="outlined" onChange={onChange} defaultValue={product.info.description}></TextField>
+                            <TextField fullWidth name="description" label="Description" variant="outlined" onChange={onChange} defaultValue={product.description}></TextField>
                         </Grid>
                         <Grid item>
-                            <TextField fullWidth name="price" label="Price" variant="outlined" type="number" onChange={onChange} defaultValue={product.info.price}></TextField>
+                            <TextField fullWidth name="price" label="Price" variant="outlined" type="number" onChange={onChange} defaultValue={product.price}></TextField>
                         </Grid>
                         <Grid item>
-                            <TextField fullWidth name="quantity" label="Quantity" variant="outlined" type="number" onChange={onChange} defaultValue={product.info.quantity}></TextField>
+                            <TextField fullWidth name="quantity" label="Quantity" variant="outlined" type="number" onChange={onChange} defaultValue={product.quantity}></TextField>
                         </Grid>
                     </Grid>
                 </Box>

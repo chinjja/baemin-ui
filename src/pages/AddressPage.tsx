@@ -20,10 +20,10 @@ export default function AddressPage() {
                         <TextField fullWidth label="Master" variant="outlined" defaultValue={address.master} InputProps={{readOnly: true}}></TextField>
                     </Grid>
                     <Grid item>
-                        <TextField fullWidth label="City" variant="outlined" defaultValue={address.info.city} InputProps={{readOnly: true}}></TextField>
+                        <TextField fullWidth label="City" variant="outlined" defaultValue={address.city} InputProps={{readOnly: true}}></TextField>
                     </Grid>
                     <Grid item>
-                        <TextField fullWidth label="Street" variant="outlined" defaultValue={address.info.street} InputProps={{readOnly: true}}></TextField>
+                        <TextField fullWidth label="Street" variant="outlined" defaultValue={address.street} InputProps={{readOnly: true}}></TextField>
                     </Grid>
                 </Grid>
             </Box>
