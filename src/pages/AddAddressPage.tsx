@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import { Box, Button, Divider, Grid, TextField, Typography } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
-import { newSeller, SellerInfo } from '../baemin/Baemin';
+import { AddressInfo, newAddress } from '../baemin/Baemin';
 import { PrivateRouteProps } from '../baemin/BaeminHooks';
 
-interface AddSellerPageProps extends PrivateRouteProps {
+interface AddAddressPageProps extends PrivateRouteProps {
 
 }
-export default function AddSellerPage(props: AddSellerPageProps) {
+export default function AddAddressPage(props: AddAddressPageProps) {
     const auth = props.auth;
     const history = useHistory();
-    const [data, setData] = useState<SellerInfo>({});
+    const [data, setData] = useState<AddressInfo>({});
 
     const onChange = (e: any) => {
         setData({
@@ -22,9 +22,9 @@ export default function AddSellerPage(props: AddSellerPageProps) {
     const handleSubmit = (e: any) => {
         e.preventDefault();
         
-        newSeller(auth, data)
+        newAddress(auth, data)
         .then(res => {
-            history.replace("/account/seller", res.data);
+            history.replace("/address", res.data);
         })
         .catch(reason => {
             alert(reason);
@@ -33,7 +33,7 @@ export default function AddSellerPage(props: AddSellerPageProps) {
 
     return (
         <>
-            <Typography variant="h6">New Seller</Typography>
+            <Typography variant="h6">New Address</Typography>
             <Box my={2}>
                 <Divider/>
             </Box>
@@ -41,10 +41,10 @@ export default function AddSellerPage(props: AddSellerPageProps) {
                 <Box my={2}>
                     <Grid container direction="column" spacing={1}>
                         <Grid item>
-                            <TextField autoFocus required variant="outlined" name="name" label="Name" onChange={onChange} fullWidth/>
+                            <TextField autoFocus required variant="outlined" name="city" label="City" onChange={onChange} fullWidth/>
                         </Grid>
                         <Grid item>
-                            <TextField required variant="outlined" name="description" label="Description" onChange={onChange} fullWidth/>
+                            <TextField required variant="outlined" name="street" label="Street" onChange={onChange} fullWidth/>
                         </Grid>
                     </Grid>
                 </Box>

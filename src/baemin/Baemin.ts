@@ -1,10 +1,38 @@
 import axios from 'axios'
-import jwt, { JwtPayload } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 
 const instance = axios.create({
     baseURL: 'http://localhost:8080/api',
     
 })
+
+instance.interceptors.response.use(res => {
+    handleDates(res.data);
+    return res;
+})
+
+const isoDateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d*)?.*$/;
+
+function isIsoDateString(value: any): boolean {
+  return value && typeof value === "string" && isoDateFormat.test(value);
+}
+
+export function handleDates(body: any) {
+    if (body === null || body === undefined || typeof body !== "object")
+      return;
+  
+    for (const key of Object.keys(body)) {
+      const value = body[key];
+      if (isIsoDateString(value)) body[key] = new Date(value);
+      else if (typeof value === "object") handleDates(value);
+    }
+  }
+
+interface ResponseEntity<T> {
+    status: number;
+    headers: Headers;
+    data?: T;
+}
 
 export interface Account {
     id: number;
@@ -12,14 +40,25 @@ export interface Account {
     name: string;
 }
 
+export interface Address extends AddressInfo {
+    id:number;
+    account: Account;
+}
+
+export interface AddressInfo {
+    name?: string;
+    master?: boolean;
+    city?: string;
+    street?: string;
+}
+
 export interface SellerInfo {
     name?: string;
     description?: string;
 }
 
-export interface Seller {
+export interface Seller extends SellerInfo {
     id: number;
-    info: SellerInfo;
     account: Account;
 }
 
@@ -37,10 +76,9 @@ export interface ProductInfo {
     description?: string;
 }
 
-export interface Product {
+export interface Product extends ProductInfo {
     id: number;
     seller: Seller;
-    info: ProductInfo;
 }
 
 export interface SignIn {
@@ -51,30 +89,35 @@ export interface SignIn {
 export type OrderStatus = "IN_PROGRESS" | "CANCELLED" | "COMPLETED";
 
 export interface Order {
-    id: number,
+    id: number;
     account: Account,
     status: OrderStatus,
     createdAt: Date,
 }
 
-export interface Cart {
-    id: number,
-    account: Account,
-    order?: Order,
+export interface AccountProductUpdateDto {
+    quantity?: number
 }
 
-export interface CartProduct {
-    id: number,
-    cart: Cart,
+export interface AccountProduct {
+    id: number;
+    account: Account,
     product: Product,
     quantity: number,
 }
 
-interface Current {
+export interface OrderProduct {
+    id: number,
+    order: Order,
+    product: Product,
+    quantity: number,
+}
+
+interface UserInfo {
     account: Account;
     token: string;
 }
-let current: Current | undefined;
+let current: UserInfo | undefined;
 
 export function getCurrentAccount(): Account | undefined {
     return current?.account;
@@ -102,12 +145,9 @@ function fireSigninListeners(account: Account | undefined) {
 
 const userInfoKey = "userInfo";
 
-interface UserInfo {
-    id: number,
-    token: string,
-}
+initSign();
 
-export async function initSign() {
+function initSign() {
     const userInfo = localStorage.getItem(userInfoKey);
     if(userInfo) {
         const info = JSON.parse(userInfo) as UserInfo;
@@ -117,12 +157,8 @@ export async function initSign() {
             return;
         }
 
-        current ={
-            account: await getAccount(info.id),
-            token: info.token,
-        }
+        current = info;
         instance.defaults.headers.common['Authorization'] = 'Bearer ' + info.token;
-        fireSigninListeners(current.account);
     }
 }
 
@@ -139,16 +175,15 @@ export async function signin(data: SignIn): Promise<Account> {
     let id = res.data.id;
     let token = res.data.token;
     instance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+    const response = await getAccount(id);
+    const account = response.data!;
     current = {
-        account: await getAccount(id),
+        account: account,
         token: token,
     }
-    localStorage.setItem(userInfoKey, JSON.stringify({
-        id: id,
-        token: token,
-    }));
+    localStorage.setItem(userInfoKey, JSON.stringify(current));
     fireSigninListeners(current.account);
-    return getAccount(id);
+    return account;
 }
 
 export async function signout(): Promise<void> {
@@ -158,85 +193,103 @@ export async function signout(): Promise<void> {
     fireSigninListeners(undefined);
 }
 
-export async function newAccount(data: NewAccount): Promise<Account> {
-    const res = await instance.post('/accounts', data);
-    return res.data;
+export async function newAccount(data: NewAccount): Promise<ResponseEntity<Account>> {
+    return instance.post('/accounts', data);
 }
 
-export async function getAccount(id: number): Promise<Account> {
-    const res = await instance.get(`/accounts/${id}`);
-    return res.data;
+export async function getAccount(id: number): Promise<ResponseEntity<Account>> {
+    return instance.get(`/accounts/${id}`);
 }
 
-export async function newSeller(account: Account, data: SellerInfo): Promise<Seller> {
-    const res = await instance.post(`/accounts/${account.id}/sellers`, data);
-    return res.data;
+export async function newAddress(account: Account, data: AddressInfo): Promise<ResponseEntity<Address>> {
+    return instance.post(`/accounts/${account.id}/addresses`, data);
 }
 
-export async function getSeller(id: number): Promise<Seller> {
-    const res = await instance.get(`/sellers/${id}`);
-    return res.data;
+export async function updateAddress(address: Address, data: AddressInfo): Promise<ResponseEntity<Address>> {
+    return instance.patch(`/addresses/${address.id}`, data);
 }
 
-export async function getSellers(): Promise<Seller[]> {
-    const res = await instance.get('/sellers');
-    return res.data;
+export async function getMasterAddress(account: Account): Promise<ResponseEntity<Address>> {
+    return instance.get(`/accounts/${account.id}/addresses/master`);
 }
 
-export async function newProduct(seller: Seller, data: ProductInfo): Promise<Product> {
-    const res = await instance.post(`/sellers/${seller.id}/products`, data);
-    return res.data;
+export async function getAddresses(account: Account): Promise<ResponseEntity<Address[]>> {
+    return instance.get(`/accounts/${account.id}/addresses`);
 }
 
-export async function getProduct(id: number): Promise<Product> {
-    const res = await instance.get(`/products/${id}`);
-    return res.data;
+export async function newSeller(account: Account, data: SellerInfo): Promise<ResponseEntity<Seller>> {
+    return instance.post(`/accounts/${account.id}/sellers`, data);
 }
 
-export async function getProducts(seller: Seller): Promise<Product[]> {
-    const res = await instance.get(`/sellers/${seller.id}/products`);
-    return res.data;
+export async function updateSeller(seller: Seller, data: SellerInfo): Promise<ResponseEntity<Seller>> {
+    return instance.patch(`/sellers/${seller.id}`, data);
 }
 
-export async function addToCart(account: Account, product: Product | number, quantity: number = 1): Promise<CartProduct> {
+export async function getSeller(id: number): Promise<ResponseEntity<Seller>> {
+    return instance.get(`/sellers/${id}`);
+}
+
+export async function getSellers(account?: Account): Promise<ResponseEntity<Seller[]>> {
+    if(account) {
+        return instance.get(`/accounts/${account.id}/sellers`);
+    }
+    return instance.get('/sellers');
+}
+
+export async function newProduct(seller: Seller, data: ProductInfo): Promise<ResponseEntity<Product>> {
+    return instance.post(`/sellers/${seller.id}/products`, data);
+}
+
+export async function updateProduct(product: Product, info: ProductInfo): Promise<ResponseEntity<Product>> {
+    return instance.patch(`/products/${product.id}`, info);
+}
+
+export async function getProduct(id: number): Promise<ResponseEntity<Product>> {
+    return instance.get(`/products/${id}`);
+}
+
+export async function getProducts(seller: Seller): Promise<ResponseEntity<Product[]>> {
+    return instance.get(`/sellers/${seller.id}/products`);
+}
+
+export async function addToCart(account: Account, product: Product | number, quantity: number = 1): Promise<ResponseEntity<AccountProduct>> {
     const product_id = typeof product === "number" ? product : product.id;
-    const res = await instance.put(`/accounts/${account.id}/products/${product_id}?quantity=${quantity}`);
-    return res.data;
+    return instance.put(`/accounts/${account.id}/products/${product_id}?quantity=${quantity}`);
 }
 
-export async function buy(cart: Cart): Promise<Order> {
-    const res = await instance.post(`/carts/${cart.id}/orders`);
-    return res.data;
+export async function buy(account: Account): Promise<ResponseEntity<Order>> {
+    return instance.post(`/accounts/${account.id}/orders`);
 }
 
-export async function getOrders(account: Account, status: OrderStatus | null = null): Promise<Order[]> {
+export async function getOrders(account: Account, status: OrderStatus | null = null): Promise<ResponseEntity<Order[]>> {
     if(status) {
-        const res = await instance.get(`/accounts/${account.id}/orders?status=${status}`);
-        return res.data;
+        return instance.get(`/accounts/${account.id}/orders?status=${status}`);
     }
     else {
-        const res = await instance.get(`/accounts/${account.id}/orders`);
-        return res.data;
+        return instance.get(`/accounts/${account.id}/orders`);
     }
 }
 
-export async function cancel(order: Order): Promise<Order> {
-    const res = await instance.patch(`/orders/${order.id}/cancel`);
-    return res.data;
+export async function cancel(order: Order): Promise<ResponseEntity<Order>> {
+    return instance.patch(`/orders/${order.id}/cancel`);
 }
 
-export async function complete(order: Order): Promise<Order> {
-    const res = await instance.patch(`/orders/${order.id}/complete`);
-    return res.data;
+export async function complete(order: Order): Promise<ResponseEntity<Order>> {
+    return instance.patch(`/orders/${order.id}/complete`);
 }
 
-export async function getCart(account: Account): Promise<Cart | null> {
-    const res = await instance.get(`/accounts/${account.id}/cart`);
-    if(res.status == 204) return null;
-    return res.data;
+export async function updateAccountProduct(entity: AccountProduct, dto: AccountProductUpdateDto): Promise<ResponseEntity<AccountProduct>> {
+    return instance.patch(`/account-products/${entity.id}`, dto);
 }
 
-export async function getCartProducts(cart: Cart): Promise<CartProduct[]> {
-    const res = await instance.get(`/carts/${cart.id}/products`);
-    return res.data;
+export async function deleteAccountProduct(entity: AccountProduct): Promise<ResponseEntity<void>> {
+    return instance.delete(`/account-products/${entity.id}`);
+}
+
+export async function getAccountProducts(account: Account): Promise<ResponseEntity<AccountProduct[]>> {
+    return instance.get(`/accounts/${account.id}/products`);
+}
+
+export async function getOrderProducts(order: Order): Promise<ResponseEntity<OrderProduct[]>> {
+    return instance.get(`/orders/${order.id}/products`);
 }

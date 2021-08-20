@@ -1,56 +1,93 @@
 import React, { useEffect, useState } from "react";
-import { Button, Typography } from "@material-ui/core";
-import { useHistory, useLocation } from "react-router-dom";
-import { buy, Cart, CartProduct, getCartProducts } from "../baemin/Baemin"
+import { Box, Button, Typography } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import { AccountProduct, AccountProductUpdateDto, buy, deleteAccountProduct, getAccountProducts, updateAccountProduct } from "../baemin/Baemin"
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
+import { PrivateRouteProps } from "../baemin/BaeminHooks";
 
-export default function CartPage() {
+interface CartPageProps extends PrivateRouteProps {
+}
+
+export default function CartPage(props: CartPageProps) {
+    const auth = props.auth;
     const history = useHistory();
-    const location = useLocation();
-    const cart = location.state as Cart;
-    const [products, setProducts] = useState<CartProduct[]>([]);
-
-    useEffect(() => {
-        getCartProducts(cart)
-        .then(data => setProducts(data))
-        .catch(reason => alert(reason.message))
-    }, [cart]);
+    const [products, setProducts] = useState<AccountProduct[]>([]);
     
+    useEffect(() => {
+        getAccountProducts(auth)
+        .then(res => setProducts(res.data || []))
+        .catch(reason => alert(reason))
+    }, [auth]);
+
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', hide: true },
+        { field: 'seller', headerName: 'Seller', flex: 1 },
         { field: 'title', headerName: 'Title', flex: 1 },
         { field: 'description', headerName: 'Description', flex: 1 },
         { field: 'price', headerName: 'Price', type: 'number', flex: 1 },
-        { field: 'quantity', headerName: 'Quantity', type: 'number', flex: 1 },
+        { field: 'quantity', headerName: 'Quantity', type: 'number', flex: 1, editable: true },
+        {
+            field: 'delete',
+            headerName: ' ',
+            sortable: false,
+            renderCell: (params) => (
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={()=>{handleDelete(params.row as any)}}>
+                    Delete
+            </Button>
+        )
+        }
     ]
 
     const rows = products.map(row => {
         return {
-            id: row.id,
-            title: row.product.info.title,
-            description: row.product.info.description,
-            price: row.product.info.price,
-            quantity: row.quantity,
+            ...row.product,
+            ...row,
+            seller: row.product.seller.name,
         }
     })
 
     const handleBuy = () => {
-        buy(cart)
-        .then(order => history.push("/order", order))
-        .catch(reason => alert(reason.message))
+        buy(auth)
+        .then(res => history.push("/order", res.data!))
+        .catch(reason => alert(reason))
+    }
+
+    const handleDelete = (entity: AccountProduct) => {
+        deleteAccountProduct(entity)
+        .then(() => {
+            setProducts(products.filter(value => value.id !== entity.id))
+        })
+        .catch(reason => alert(reason))
+    }
+
+    const handleUpdate = (entity: AccountProduct, data: AccountProductUpdateDto) => {
+        updateAccountProduct(entity, data)
+        .then(res => {
+            setProducts(products.map(value => value.id === res.data?.id ? res.data : value))
+        })
+        .catch(reason => alert(reason))
     }
 
     return (
-        <div>
-            <Typography>Cart product List</Typography>
-            <div style={{height: 400, width: '100%'}}>
+        <>
+            <Typography variant="h6">Cart</Typography>
+            <Box my={2}>
                 <DataGrid
+                    autoHeight
                     columns={columns}
                     rows={rows}
-                    pageSize={5}
+                    disableColumnMenu
+                    disableSelectionOnClick
+                    onCellEditCommit={e=>{
+                        handleUpdate((e as any).row, {
+                            [e.field]: +e.value!
+                        })
+                    }}
                     />
-            </div>
-            <Button variant="outlined" onClick={handleBuy}>Buy</Button>
-        </div>
+            </Box>
+            <Button variant="contained" color="primary" onClick={handleBuy}>Buy</Button>
+        </>
     );
 }

@@ -1,22 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Button, Typography } from "@material-ui/core";
+import React, { useState } from "react";
+import { Box, Button, Divider, Grid, TextField, Typography } from "@material-ui/core";
 import { useHistory, useLocation } from "react-router-dom";
-import { Account, addToCart, getCart, getCurrentAccount, getProducts, Product, Seller } from "../baemin/Baemin"
-import SellerUi from "../components/SellerUi";
+import { addToCart,  Seller } from "../baemin/Baemin"
 import { DataGrid, GridColDef, GridRowId } from "@material-ui/data-grid";
+import { useAuth, useProducts } from "../baemin/BaeminHooks";
 
 export default function SellerPage() {
     const history = useHistory();
     const location = useLocation();
     const seller = location.state as Seller;
-    const [products, setProducts] = useState<Product[]>([]);
+    const products = useProducts(seller);
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
-    const account = getCurrentAccount();
-    
-    useEffect(() => {
-        getProducts(seller)
-        .then(data => setProducts(data))
-    }, [seller]);
+    const auth = useAuth();
     
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', hide: true },
@@ -29,22 +24,17 @@ export default function SellerPage() {
 
     const rows = products.map(row => {
         return {
-            id: row.id,
-            code: row.info.code,
-            title: row.info.title,
-            description: row.info.description,
-            price: row.info.price,
-            quantity: row.info.quantity,
+            ...row,
         }
     })
 
-    const handleAddProduct = () => {
-        history.push("/product/add", seller);
-    }
-
     const handleAddToCart = () => {
+        if(selectionModel.length === 0) {
+            alert("선택된 제품이 없습니다.");
+            return;
+        }
         Promise.all(selectionModel.map(product_id=>
-            addToCart(account!, product_id as number)
+            addToCart(auth!, product_id as number)
         ))
         .then(_ => {
             setSelectionModel([]);
@@ -56,39 +46,47 @@ export default function SellerPage() {
     };
 
     const handleGoToCart = () => {
-        getCart(account!)
-        .then(cart => {
-            if(cart) {
-                history.push("/cart", cart);
-            }
-            else {
-                alert('장바구니가 존재하지 않습니다.');
-            }
-        })
-        .catch(reason => {
-            alert(reason.message);
-        })
+        history.push("/account/cart", auth!);
     };
 
     return (
-        <div>
-            <Typography>Seller Details Page</Typography>
-            <SellerUi seller={seller}/>
-            <Typography>Product List</Typography>
-            <div style={{height: 400, width: '100%'}}>
+        <>
+            <Typography variant="h6">Details of seller</Typography>
+            <Box my={2}>
+                <Divider/>
+            </Box>
+            <Grid container direction="column" spacing={1}>
+                <Grid item>
+                    <TextField fullWidth label="Name" variant="outlined" defaultValue={seller.name} InputProps={{readOnly: true}}></TextField>
+                </Grid>
+                <Grid item>
+                    <TextField fullWidth label="Description" variant="outlined" defaultValue={seller.description} InputProps={{readOnly: true}}></TextField>
+                </Grid>
+            </Grid>
+            <Box my={2}>
+                <Divider/>
+            </Box>
+            <Box my={2}>
                 <DataGrid
+                    autoHeight
                     columns={columns}
                     rows={rows}
-                    pageSize={5}
                     checkboxSelection
+                    disableColumnMenu
                     disableSelectionOnClick
                     onSelectionModelChange={e=>setSelectionModel(e)}
                     selectionModel={selectionModel}
+                    onRowClick={e=>history.push("/product", e.row)}
                     />
-            </div>
-            {seller.account.id === account?.id && <Button variant="outlined" onClick={handleAddProduct}>Add Product</Button>}
-            {account && <Button variant="outlined" onClick={handleAddToCart}>Add to cart</Button>}
-            {account && <Button variant="outlined" onClick={handleGoToCart}>Go to cart</Button>}
-        </div>
+            </Box>
+            {auth && <Grid container spacing={1}>
+                <Grid item>
+                    <Button variant="contained" color="primary" onClick={handleAddToCart} disabled={selectionModel.length === 0 || undefined}>Add to cart</Button>
+                </Grid>
+                <Grid item>
+                    <Button variant="contained" color="primary" onClick={handleGoToCart}>Go to cart</Button>
+                </Grid>
+            </Grid>}
+        </>
     );
 }
