@@ -28,10 +28,10 @@ export function handleDates(body: any) {
     }
   }
 
-interface ResponseEntity<T> {
+export interface ResponseEntity<T> {
     status: number;
-    headers: Headers;
-    data?: T;
+    headers: any;
+    data: T;
 }
 
 export interface Account {
@@ -205,12 +205,16 @@ export async function newAddress(account: Account, data: AddressInfo): Promise<R
     return instance.post(`/accounts/${account.id}/addresses`, data);
 }
 
-export async function updateAddress(address: Address, data: AddressInfo): Promise<ResponseEntity<Address>> {
-    return instance.patch(`/addresses/${address.id}`, data);
+export async function updateAddress(address: ResponseEntity<Address>, data: AddressInfo): Promise<ResponseEntity<Address>> {
+    return instance.patch(`/addresses/${address.data!.id}`, data, ifMatch(address));
 }
 
 export async function getMasterAddress(account: Account): Promise<ResponseEntity<Address>> {
     return instance.get(`/accounts/${account.id}/addresses/master`);
+}
+
+export async function getAddress(id: number): Promise<ResponseEntity<Address>> {
+    return instance.get(`/addresses/${id}`);
 }
 
 export async function getAddresses(account: Account): Promise<ResponseEntity<Address[]>> {
@@ -221,8 +225,8 @@ export async function newSeller(account: Account, data: SellerInfo): Promise<Res
     return instance.post(`/accounts/${account.id}/sellers`, data);
 }
 
-export async function updateSeller(seller: Seller, data: SellerInfo): Promise<ResponseEntity<Seller>> {
-    return instance.patch(`/sellers/${seller.id}`, data);
+export async function updateSeller(seller: ResponseEntity<Seller>, data: SellerInfo): Promise<ResponseEntity<Seller>> {
+    return instance.patch(`/sellers/${seller.data.id}`, data, ifMatch(seller));
 }
 
 export async function getSeller(id: number): Promise<ResponseEntity<Seller>> {
@@ -240,8 +244,8 @@ export async function newProduct(seller: Seller, data: ProductInfo): Promise<Res
     return instance.post(`/sellers/${seller.id}/products`, data);
 }
 
-export async function updateProduct(product: Product, info: ProductInfo): Promise<ResponseEntity<Product>> {
-    return instance.patch(`/products/${product.id}`, info);
+export async function updateProduct(product: ResponseEntity<Product>, info: ProductInfo): Promise<ResponseEntity<Product>> {
+    return instance.patch(`/products/${product.data.id}`, info, ifMatch(product));
 }
 
 export async function getProduct(id: number): Promise<ResponseEntity<Product>> {
@@ -261,6 +265,10 @@ export async function buy(account: Account): Promise<ResponseEntity<Order>> {
     return instance.post(`/accounts/${account.id}/orders`);
 }
 
+export async function getOrder(id: number): Promise<ResponseEntity<Order>> {
+    return instance.get(`/orders/${id}`);
+}
+
 export async function getOrders(account: Account, status: OrderStatus | null = null): Promise<ResponseEntity<Order[]>> {
     if(status) {
         return instance.get(`/accounts/${account.id}/orders?status=${status}`);
@@ -270,16 +278,16 @@ export async function getOrders(account: Account, status: OrderStatus | null = n
     }
 }
 
-export async function cancel(order: Order): Promise<ResponseEntity<Order>> {
-    return instance.patch(`/orders/${order.id}/cancel`);
+export async function cancel(order: ResponseEntity<Order>): Promise<ResponseEntity<Order>> {
+    return instance.patch(`/orders/${order.data.id}/cancel`, ifMatch(order));
 }
 
-export async function complete(order: Order): Promise<ResponseEntity<Order>> {
-    return instance.patch(`/orders/${order.id}/complete`);
+export async function complete(order: ResponseEntity<Order>): Promise<ResponseEntity<Order>> {
+    return instance.patch(`/orders/${order.data.id}/complete`, ifMatch(order));
 }
 
-export async function updateAccountProduct(entity: AccountProduct, dto: AccountProductUpdateDto): Promise<ResponseEntity<AccountProduct>> {
-    return instance.patch(`/account-products/${entity.id}`, dto);
+export async function updateAccountProduct(entity: ResponseEntity<AccountProduct>, dto: AccountProductUpdateDto): Promise<ResponseEntity<AccountProduct>> {
+    return instance.patch(`/account-products/${entity.data.id}`, dto, ifMatch(entity));
 }
 
 export async function deleteAccountProduct(entity: AccountProduct): Promise<ResponseEntity<void>> {
@@ -292,4 +300,20 @@ export async function getAccountProducts(account: Account): Promise<ResponseEnti
 
 export async function getOrderProducts(order: Order): Promise<ResponseEntity<OrderProduct[]>> {
     return instance.get(`/orders/${order.id}/products`);
+}
+
+export function entity<T>(data: T, status = 0, headers?: any): ResponseEntity<T> {
+    return {
+        status: status,
+        data: data,
+        headers: headers,
+    }
+}
+
+function ifMatch(entity: ResponseEntity<any>) {
+    return {
+        headers: {
+            'If-Match': entity.headers.etag,
+        }
+    }
 }

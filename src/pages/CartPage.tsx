@@ -63,11 +63,11 @@ export default function CartPage(props: CartPageProps) {
     }
 
     const handleUpdate = (entity: AccountProduct, data: AccountProductUpdateDto) => {
-        updateAccountProduct(entity, data)
-        .then(res => {
-            setProducts(products.map(value => value.id === res.data?.id ? res.data : value))
-        })
-        .catch(reason => alert(reason))
+        // updateAccountProduct(entity, data)
+        // .then(res => {
+        //     setProducts(products.map(value => value.id === res.data?.id ? res.data : value))
+        // })
+        // .catch(reason => alert(reason))
     }
 
     return (

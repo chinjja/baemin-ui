@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Divider, Grid, TextField, Typography } from "@material-ui/core";
 import { Redirect, useHistory, useLocation } from "react-router-dom";
-import { Seller, SellerInfo, updateSeller } from "../baemin/Baemin"
+import { entity, getSeller, Seller, SellerInfo, updateSeller } from "../baemin/Baemin"
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
 import { PrivateRouteProps, useProducts } from "../baemin/BaeminHooks";
 
@@ -13,14 +13,17 @@ export default function AccountSellerPage(props: AccountSellerPageProps) {
     const auth = props.auth;
     const history = useHistory();
     const location = useLocation();
-    const [seller, setSeller] = useState(location.state as Seller);
-    const products = useProducts(seller);
+    const origin = location.state as Seller;
+    const [seller, setSeller] = useState(entity(origin));
+    const products = useProducts(seller.data);
     const [data, setData] = useState<SellerInfo>({});
-
-    if(seller.account.id !== auth.id) {
-        return <Redirect to="/invalid"/>
-    }
     
+    useEffect(() => {
+        getSeller(origin.id)
+        .then(res => setSeller(res))
+        .catch(reason => alert(reason))
+    }, [origin])
+
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', hide: true },
         { field: 'code', headerName: 'Code', flex: 1},
@@ -49,8 +52,12 @@ export default function AccountSellerPage(props: AccountSellerPageProps) {
 
     const handleModifySeller = () => {
         updateSeller(seller, data)
-        .then(res => setSeller(res.data!))
+        .then(res => setSeller(res))
         .catch(reason => alert(reason))
+    }
+
+    if(seller.data.account.id !== auth.id) {
+        return <Redirect to="/invalid"/>
     }
 
     return (
@@ -62,13 +69,13 @@ export default function AccountSellerPage(props: AccountSellerPageProps) {
             <Box my={2}>
                 <Grid container direction="column" spacing={1}>
                     <Grid item>
-                        <TextField fullWidth name="id" label="ID" variant="outlined" defaultValue={seller.id} disabled></TextField>
+                        <TextField fullWidth name="id" label="ID" variant="outlined" defaultValue={seller.data.id} disabled></TextField>
                     </Grid>
                     <Grid item>
-                        <TextField fullWidth name="name" label="Name" variant="outlined" defaultValue={seller.name} onChange={onChange}></TextField>
+                        <TextField fullWidth name="name" label="Name" variant="outlined" defaultValue={seller.data.name} onChange={onChange}></TextField>
                     </Grid>
                     <Grid item>
-                        <TextField fullWidth name="description" label="Description" variant="outlined" defaultValue={seller.description} onChange={onChange}></TextField>
+                        <TextField fullWidth name="description" label="Description" variant="outlined" defaultValue={seller.data.description} onChange={onChange}></TextField>
                     </Grid>
                 </Grid>
             </Box>

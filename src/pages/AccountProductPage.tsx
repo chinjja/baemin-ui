@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect, useLocation } from "react-router-dom";
-import { Product, updateProduct } from "../baemin/Baemin";
+import { entity, getProduct, Product, ProductInfo, updateProduct } from "../baemin/Baemin";
 import { Box, Button, Divider, Grid, TextField, Typography } from "@material-ui/core";
 import { PrivateRouteProps } from "../baemin/BaeminHooks";
 
@@ -11,26 +11,34 @@ interface AccountProductPageProps extends PrivateRouteProps {
 export default function AccountProductPage(props: AccountProductPageProps) {
     const auth = props.auth;
     const location = useLocation();
-    const [product, setProduct] = useState(location.state as Product);
-
-    if(product.seller.account.id !== auth.id) {
-        return <Redirect to="/invalid"/>
-    }
+    const origin = location.state as Product;
+    const [product, setProduct] = useState(entity(origin));
+    const [dto, setDto] = useState<ProductInfo>({});
     
+    useEffect(() => {
+        getProduct(origin.id)
+        .then(res => setProduct(res))
+        .catch(reason => alert(reason))
+    }, [origin])
+
     const handleModify = (e: any) => {
         e.preventDefault();
-        updateProduct(product, product)
-        .then(res => setProduct(res.data!))
+        updateProduct(product, dto)
+        .then(res => setProduct(res))
         .catch(reason => alert(reason))
     }
 
     const onChange = (e: any) => {
-        setProduct({
-            ...product,
+        setDto({
+            ...dto,
             [e.target.name]: e.target.value
         })
     }
     
+    if(product.data.seller.account.id !== auth.id) {
+        return <Redirect to="/invalid"/>
+    }
+
     return (
         <>
             <Typography variant="h6">Details of Product</Typography>
@@ -41,22 +49,22 @@ export default function AccountProductPage(props: AccountProductPageProps) {
                 <Box my={2}>
                     <Grid container direction="column" spacing={1}>
                         <Grid item>
-                            <TextField fullWidth label="ID" variant="outlined" defaultValue={product.id} InputProps={{readOnly: true}} disabled></TextField>
+                            <TextField fullWidth label="ID" variant="outlined" defaultValue={product.data.id} InputProps={{readOnly: true}} disabled></TextField>
                         </Grid>
                         <Grid item>
-                            <TextField fullWidth name="code" label="Code" variant="outlined" defaultValue={product.code} InputProps={{readOnly: true}} disabled></TextField>
+                            <TextField fullWidth name="code" label="Code" variant="outlined" defaultValue={product.data.code} InputProps={{readOnly: true}} disabled></TextField>
                         </Grid>
                         <Grid item>
-                            <TextField fullWidth name="title" label="Title" variant="outlined" onChange={onChange} defaultValue={product.title}></TextField>
+                            <TextField fullWidth name="title" label="Title" variant="outlined" onChange={onChange} defaultValue={product.data.title}></TextField>
                         </Grid>
                         <Grid item>
-                            <TextField fullWidth name="description" label="Description" variant="outlined" onChange={onChange} defaultValue={product.description}></TextField>
+                            <TextField fullWidth name="description" label="Description" variant="outlined" onChange={onChange} defaultValue={product.data.description}></TextField>
                         </Grid>
                         <Grid item>
-                            <TextField fullWidth name="price" label="Price" variant="outlined" type="number" onChange={onChange} defaultValue={product.price}></TextField>
+                            <TextField fullWidth name="price" label="Price" variant="outlined" type="number" onChange={onChange} defaultValue={product.data.price}></TextField>
                         </Grid>
                         <Grid item>
-                            <TextField fullWidth name="quantity" label="Quantity" variant="outlined" type="number" onChange={onChange} defaultValue={product.quantity}></TextField>
+                            <TextField fullWidth name="quantity" label="Quantity" variant="outlined" type="number" onChange={onChange} defaultValue={product.data.quantity}></TextField>
                         </Grid>
                     </Grid>
                 </Box>
