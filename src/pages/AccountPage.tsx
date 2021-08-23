@@ -31,9 +31,6 @@ export default function AccountPage(props: AccountPageProps) {
                         <TextField fullWidth label="Email" variant="outlined" defaultValue={auth.email}></TextField>
                     </Grid>
                     <Grid item>
-                        <TextField fullWidth label="Email" variant="outlined" defaultValue={auth.email}></TextField>
-                    </Grid>
-                    <Grid item>
                         <AddressView address={masterAddress}/>
                     </Grid>
                 </Grid>
