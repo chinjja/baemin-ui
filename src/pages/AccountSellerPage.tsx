@@ -40,7 +40,7 @@ export default function AccountSellerPage(props: AccountSellerPageProps) {
     })
 
     const handleAddProduct = () => {
-        history.push("/account/product/add", seller);
+        history.push("/account/product/add", seller.data);
     }
 
     const onChange = (e: any) => {

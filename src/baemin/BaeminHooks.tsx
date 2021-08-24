@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Redirect, Route } from 'react-router-dom';
-import { Account, AccountProduct, Address, addSigninListener, getAccountProducts, getAddresses, getCurrentAccount, getMasterAddress, getOrderProducts, getOrders, getProducts, getSellers, Order, OrderProduct, Product, removeSigninListener, Seller } from './Baemin'
+import { Account, AccountProduct, Address, addSigninListener, getAccountProducts, getAddresses, getCurrentAccount, getMasterAddress, getOrderProducts, getOrders, getProducts, getSellers, Order, OrderProduct, Product, removeSigninListener, Seller, signout } from './Baemin'
 
 export function useAuth() {
     const [account, setAccount] = useState(getCurrentAccount());
@@ -108,6 +108,9 @@ export interface PrivateRouteProps {
 export function PrivateRoute({component: Component, ...rest}: any) {
     const account = useAuth();
 
+    if(!account) {
+        signout();
+    }
     return (
         <Route
         {...rest}
