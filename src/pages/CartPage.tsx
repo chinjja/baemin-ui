@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Typography } from "@material-ui/core";
+import { Box, Button, Divider, TextField, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { AccountProduct, AccountProductUpdateDto, buy, deleteAccountProduct, getAccountProducts, updateAccountProduct } from "../baemin/Baemin"
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
@@ -12,6 +12,9 @@ export default function CartPage(props: CartPageProps) {
     const auth = props.auth;
     const history = useHistory();
     const [products, setProducts] = useState<AccountProduct[]>([]);
+    const totalPrice = products
+        .map(value => value.product.price! * value.quantity)
+        .reduce((prev, cur) => prev + cur, 0);
     
     useEffect(() => {
         getAccountProducts(auth)
@@ -51,6 +54,13 @@ export default function CartPage(props: CartPageProps) {
             type: 'number',
             flex: 1,
             editable: true
+        },
+        {
+            field: 'total',
+            headerName: 'Total',
+            type: 'number',
+            flex: 1,
+            valueGetter: p => p.row.product.price * p.row.quantity,
         },
         {
             field: 'delete',
@@ -106,7 +116,18 @@ export default function CartPage(props: CartPageProps) {
                     }}
                     />
             </Box>
-            <Button variant="contained" color="primary" onClick={handleBuy} disabled={products.length == 0}>Buy</Button>
+            <TextField
+                label="Total Price"
+                variant="outlined"
+                fullWidth
+                type="number"
+                InputProps={{readOnly: true}}
+                value={totalPrice}>
+            </TextField>
+            <Box my={2}>
+                <Divider/>
+            </Box>
+            <Button variant="contained" color="primary" onClick={handleBuy} disabled={products.length === 0}>Buy</Button>
         </>
     );
 }
