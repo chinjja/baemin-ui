@@ -23,16 +23,11 @@ export default function SellerPage() {
     ]
 
     const handleAddToCart = () => {
-        if(selectionModel.length === 0) {
-            alert("선택된 제품이 없습니다.");
-            return;
-        }
         Promise.all(selectionModel.map(product_id=>
             addToCart(auth!, product_id as number)
         ))
         .then(_ => {
             setSelectionModel([]);
-            alert("장바구니에 추가되었습니다.")
         })
         .catch(reason => {
             alert(reason);
