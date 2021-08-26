@@ -34,10 +34,12 @@ export interface ResponseEntity<T> {
     data: T;
 }
 
-export interface Account {
+export interface AccountInfo {
+    email?: string;
+    name?: string;
+}
+export interface Account extends AccountInfo {
     id: number;
-    email: string;
-    name: string;
 }
 
 export interface Address extends AddressInfo {
@@ -195,6 +197,17 @@ export async function signout(): Promise<void> {
 
 export async function newAccount(data: NewAccount): Promise<ResponseEntity<Account>> {
     return instance.post('/accounts', data);
+}
+
+export async function updateAccount(account: ResponseEntity<Account>, dto: AccountInfo): Promise<ResponseEntity<Account>> {
+    return instance.patch(`/accounts/${account.data.id}`, dto, ifMatch(account))
+    .then(res => {
+        if(current && current.account.id === res.data.id) {
+            current.account = res.data;
+            fireSigninListeners(current.account);
+        }
+        return res;
+    });
 }
 
 export async function getAccount(id: number): Promise<ResponseEntity<Account>> {
