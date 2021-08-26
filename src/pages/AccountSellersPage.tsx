@@ -22,12 +22,6 @@ export default function AccountSellersPage(props: AccountSellersPageProps) {
         { field: 'description', headerName: 'Description', flex: 1 },
     ]
 
-    const rows = sellers.map(row => {
-        return {
-            ...row,
-        }
-    })
-
     return (
         <>
             <Typography variant="h6">List of seller</Typography>
@@ -35,7 +29,7 @@ export default function AccountSellersPage(props: AccountSellersPageProps) {
                 <DataGrid
                     autoHeight
                     columns={columns}
-                    rows={rows}
+                    rows={sellers}
                     onRowClick={e=>history.push("/account/seller", e.row)}
                     disableSelectionOnClick
                     disableColumnMenu

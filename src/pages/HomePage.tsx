@@ -11,15 +11,8 @@ export default function HomePage() {
     const columns: GridColDef[] = [
         { field: 'name', headerName: 'Name', flex: 1},
         { field: 'description', headerName: 'Description', flex: 1 },
-        { field: 'seller', headerName: 'Seller', flex: 1 },
+        { field: 'seller', headerName: 'Seller', flex: 1, valueGetter: p => p.row.account.name },
     ]
-
-    const rows = sellers.map(row => {
-        return {
-            ...row,
-            seller: row.account.name,
-        }
-    })
 
     return (
         <>
@@ -28,7 +21,7 @@ export default function HomePage() {
                 <DataGrid
                     autoHeight
                     columns={columns}
-                    rows={rows}
+                    rows={sellers}
                     onRowClick={e=>history.push("/seller", e.row)}
                     disableSelectionOnClick
                     disableColumnMenu

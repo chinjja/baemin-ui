@@ -20,11 +20,38 @@ export default function CartPage(props: CartPageProps) {
     }, [auth]);
 
     const columns: GridColDef[] = [
-        { field: 'seller', headerName: 'Seller', flex: 1 },
-        { field: 'title', headerName: 'Title', flex: 1 },
-        { field: 'description', headerName: 'Description', flex: 1 },
-        { field: 'price', headerName: 'Price', type: 'number', flex: 1 },
-        { field: 'quantity', headerName: 'Quantity', type: 'number', flex: 1, editable: true },
+        {
+            field: 'seller',
+            headerName: 'Seller',
+            flex: 1,
+            valueGetter: p => p.row.product.seller.name,
+        },
+        {
+            field: 'title',
+            headerName: 'Title',
+            flex: 1,
+            valueGetter: p => p.row.product.title,
+        },
+        {
+            field: 'description',
+            headerName: 'Description',
+            flex: 1,
+            valueGetter: p => p.row.product.description,
+        },
+        {
+            field: 'price',
+            headerName: 'Price',
+            type: 'number',
+            flex: 1,
+            valueGetter: p => p.row.product.price,
+        },
+        {
+            field: 'quantity',
+            headerName: 'Quantity',
+            type: 'number',
+            flex: 1,
+            editable: true
+        },
         {
             field: 'delete',
             headerName: ' ',
@@ -39,14 +66,6 @@ export default function CartPage(props: CartPageProps) {
         )
         }
     ]
-
-    const rows = products.map(row => {
-        return {
-            ...row.product,
-            ...row,
-            seller: row.product.seller.name,
-        }
-    })
 
     const handleBuy = () => {
         buy(auth)
@@ -77,7 +96,7 @@ export default function CartPage(props: CartPageProps) {
                 <DataGrid
                     autoHeight
                     columns={columns}
-                    rows={rows}
+                    rows={products}
                     disableColumnMenu
                     disableSelectionOnClick
                     onCellEditCommit={e=>{

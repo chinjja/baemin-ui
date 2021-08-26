@@ -32,19 +32,31 @@ export default function OrderPage() {
     }
 
     const columns: GridColDef[] = [
-        { field: 'seller', headerName: 'Seller', flex: 1 },
-        { field: 'title', headerName: 'Title', flex: 1 },
-        { field: 'price', headerName: 'Price', type: 'number', flex: 1 },
-        { field: 'quantity', headerName: 'Quantity', type: 'number', flex: 1 },
+        {
+            field: 'seller',
+            headerName: 'Seller',
+            flex: 1,
+            valueGetter: p => p.row.product.seller.name
+        },
+        {
+            field: 'title',
+            headerName: 'Title',
+            flex: 1,
+            valueGetter: p => p.row.product.title
+        },
+        {
+            field: 'price',
+            headerName: 'Price',
+            type: 'number',
+            flex: 1,
+            valueGetter: p => p.row.product.price },
+        {
+            field: 'quantity',
+            headerName: 'Quantity',
+            type: 'number',
+            flex: 1
+        },
     ]
-
-    const rows = products.map(row => {
-        return {
-            ...row.product,
-            ...row,
-            seller: row.product.seller.name,
-        }
-    })
 
     const isOwner = order.data.account.id === auth?.id;
 
@@ -76,7 +88,7 @@ export default function OrderPage() {
                 <DataGrid
                     autoHeight
                     columns={columns}
-                    rows={rows}
+                    rows={products}
                     disableSelectionOnClick
                     disableColumnMenu
                     onRowClick={e=>history.push("/product", e.row.product)}

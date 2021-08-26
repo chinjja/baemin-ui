@@ -22,12 +22,6 @@ export default function SellerPage() {
         { field: 'quantity', headerName: 'Quantity', type: 'number', flex: 1 },
     ]
 
-    const rows = products.map(row => {
-        return {
-            ...row,
-        }
-    })
-
     const handleAddToCart = () => {
         if(selectionModel.length === 0) {
             alert("선택된 제품이 없습니다.");
@@ -70,7 +64,7 @@ export default function SellerPage() {
                 <DataGrid
                     autoHeight
                     columns={columns}
-                    rows={rows}
+                    rows={products}
                     checkboxSelection
                     disableColumnMenu
                     disableSelectionOnClick

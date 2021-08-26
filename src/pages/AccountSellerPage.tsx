@@ -25,19 +25,12 @@ export default function AccountSellerPage(props: AccountSellerPageProps) {
     }, [origin])
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', hide: true },
         { field: 'code', headerName: 'Code', flex: 1},
         { field: 'title', headerName: 'Title', flex: 1 },
         { field: 'description', headerName: 'Description', flex: 1 },
         { field: 'price', headerName: 'Price', type: 'number', flex: 1 },
         { field: 'quantity', headerName: 'Quantity', type: 'number', flex: 1 },
     ]
-
-    const rows = products.map(row => {
-        return {
-            ...row,
-        }
-    })
 
     const handleAddProduct = () => {
         history.push("/account/product/add", seller.data);
@@ -87,7 +80,7 @@ export default function AccountSellerPage(props: AccountSellerPageProps) {
                 <DataGrid
                     autoHeight
                     columns={columns}
-                    rows={rows}
+                    rows={products}
                     disableColumnMenu
                     disableSelectionOnClick
                     onRowClick={e=>history.push("/account/product", e.row)}

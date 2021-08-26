@@ -18,12 +18,6 @@ export default function OrdersPage(props: OrdersPageProps) {
         { field: 'status', headerName: 'Status', flex: 1 },
     ]
 
-    const rows = orders.map(row => {
-        return {
-            ...row,
-        }
-    })
-
     return (
         <>
             <Typography variant="h6">List of order</Typography>
@@ -31,7 +25,7 @@ export default function OrdersPage(props: OrdersPageProps) {
                 <DataGrid
                     autoHeight
                     columns={columns}
-                    rows={rows}
+                    rows={orders}
                     onRowClick={e=>history.push("/order", e.row)}
                     disableSelectionOnClick
                     disableColumnMenu

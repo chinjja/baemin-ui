@@ -20,12 +20,6 @@ export default function AddressesPage(props: AddressesPageProps) {
         { field: 'street', headerName: 'Street', flex: 1 },
     ]
 
-    const rows = addresses.map(row => {
-        return {
-            ...row,
-        }
-    })
-
     return (
         <>
             <Typography variant="h6">List of Address</Typography>
@@ -33,7 +27,7 @@ export default function AddressesPage(props: AddressesPageProps) {
                 <DataGrid
                     autoHeight
                     columns={columns}
-                    rows={rows}
+                    rows={addresses}
                     disableColumnMenu
                     disableSelectionOnClick
                     onRowClick={e=>history.push("/account/address", e.row)}
