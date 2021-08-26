@@ -106,7 +106,7 @@ export default function CartPage(props: CartPageProps) {
                     }}
                     />
             </Box>
-            <Button variant="contained" color="primary" onClick={handleBuy}>Buy</Button>
+            <Button variant="contained" color="primary" onClick={handleBuy} disabled={products.length == 0}>Buy</Button>
         </>
     );
 }
