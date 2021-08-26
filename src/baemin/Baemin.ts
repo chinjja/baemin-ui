@@ -294,6 +294,10 @@ export async function deleteAccountProduct(entity: AccountProduct): Promise<Resp
     return instance.delete(`/account-products/${entity.id}`);
 }
 
+export async function getAccountProduct(id: number): Promise<ResponseEntity<AccountProduct>> {
+    return instance.get(`/account-products/${id}`)
+}
+
 export async function getAccountProducts(account: Account): Promise<ResponseEntity<AccountProduct[]>> {
     return instance.get(`/accounts/${account.id}/products`);
 }
