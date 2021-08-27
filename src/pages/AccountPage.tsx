@@ -49,28 +49,38 @@ export default function AccountPage(props: AccountPageProps) {
                         <TextField name="email" fullWidth label="Email" variant="outlined" onChange={onChange} defaultValue={account.data.email}></TextField>
                     </Grid>
                     <Grid item>
-                        <AddressView address={masterAddress}/>
+                        <Button variant="contained" color="primary" onClick={handleModifyAccount}>Modify</Button>
                     </Grid>
                 </Grid>
             </Box>
-            <Button variant="contained" color="primary" onClick={handleModifyAccount}>Modify</Button>
+            <Divider/>
             <Box my={2}>
-                <Divider/>
+                <Grid container direction="column" spacing={1}>
+                    <Grid item>
+                        <Typography variant="subtitle1">Address</Typography>
+                    </Grid>
+                    <Grid item>
+                        <AddressView address={masterAddress}/>
+                    </Grid>
+                    <Grid item>
+                        <Button variant="contained" color="primary" onClick={() => history.push("/account/addresses")}>Modify</Button>
+                    </Grid>
+                </Grid>
             </Box>
-            <Grid container spacing={1}>
-                <Grid item>
-                    <Button variant="contained" color="primary" onClick={() => history.push("/account/cart")}>Cart</Button>
+            <Divider/>
+            <Box my={2}>
+                <Grid container spacing={1}>
+                    <Grid item>
+                        <Button variant="contained" color="primary" onClick={() => history.push("/account/cart")}>Cart</Button>
+                    </Grid>
+                    <Grid item>
+                        <Button variant="contained" color="primary" onClick={() => history.push("/account/orders")}>Orders</Button>
+                    </Grid>
+                    <Grid item>
+                        <Button variant="contained" color="primary" onClick={() => history.push("/account/sellers")}>Sellers</Button>
+                    </Grid>
                 </Grid>
-                <Grid item>
-                    <Button variant="contained" color="primary" onClick={() => history.push("/account/orders")}>Orders</Button>
-                </Grid>
-                <Grid item>
-                    <Button variant="contained" color="primary" onClick={() => history.push("/account/sellers")}>Sellers</Button>
-                </Grid>
-                <Grid item>
-                    <Button variant="contained" color="primary" onClick={() => history.push("/account/addresses")}>Addresses</Button>
-                </Grid>
-            </Grid>
+            </Box>
         </>
     );
 }
