@@ -12,6 +12,9 @@ export default function OrderPage() {
     const origin = location.state as Order;
     const [order, setOrder] = useState(entity(origin));
     const products = useOrderProducts(order.data);
+    const totalPrice = products
+        .map(value => value.product.price! * value.quantity)
+        .reduce((prev, cur) => prev + cur, 0);
 
     useEffect(() => {
         getOrder(origin.id)
@@ -56,6 +59,13 @@ export default function OrderPage() {
             type: 'number',
             flex: 1
         },
+        {
+            field: 'total',
+            headerName: 'Total',
+            type: 'number',
+            flex: 1,
+            valueGetter: p => p.row.product.price * p.row.quantity,
+        },
     ]
 
     const isOwner = order.data.account.id === auth?.id;
@@ -85,23 +95,39 @@ export default function OrderPage() {
             </Box>
             <Divider/>
             <Box my={2}>
-                <DataGrid
-                    autoHeight
-                    columns={columns}
-                    rows={products}
-                    disableSelectionOnClick
-                    disableColumnMenu
-                    onRowClick={e=>history.push("/product", e.row.product)}
-                    />
+            <Grid container direction="column" spacing={1}>
+                    <Grid item>
+                        <DataGrid
+                            autoHeight
+                            columns={columns}
+                            rows={products}
+                            disableSelectionOnClick
+                            disableColumnMenu
+                            onRowClick={e=>history.push("/product", e.row.product)}
+                            />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            label="Total Price"
+                            variant="outlined"
+                            fullWidth
+                            type="number"
+                            InputProps={{readOnly: true}}
+                            value={totalPrice}>
+                        </TextField>
+                    </Grid>
+                </Grid>
             </Box>
-            {isOwner && <Grid container spacing={1}>
-                <Grid item>
-                    <Button variant="contained" color="primary" onClick={handleComplete} disabled={order.data.status !== "IN_PROGRESS" || undefined}>Complete</Button>
+            <Box hidden={!isOwner}>
+                <Grid container spacing={1}>
+                    <Grid item>
+                        <Button variant="contained" color="primary" onClick={handleComplete} disabled={order.data.status !== "IN_PROGRESS" || undefined}>Complete</Button>
+                    </Grid>
+                    <Grid item>
+                        <Button variant="contained" color="primary" onClick={handleCancel} disabled={order.data.status !== "IN_PROGRESS" || undefined}>Cancel</Button>
+                    </Grid>
                 </Grid>
-                <Grid item>
-                    <Button variant="contained" color="primary" onClick={handleCancel} disabled={order.data.status !== "IN_PROGRESS" || undefined}>Cancel</Button>
-                </Grid>
-            </Grid>}
+            </Box>
         </>
     );
 }
