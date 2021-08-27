@@ -37,6 +37,12 @@ export default function ProductPage() {
             <Box my={2}>
                 <Grid container direction="column" spacing={1}>
                     <Grid item>
+                        <TextField fullWidth label="Seller" variant="outlined" value={product.seller.name} disabled></TextField>
+                    </Grid>
+                    <Grid item>
+                        <Divider/>
+                    </Grid>
+                    <Grid item>
                         <TextField fullWidth label="Code" variant="outlined" value={product.code} InputProps={inputProps}></TextField>
                     </Grid>
                     <Grid item>
