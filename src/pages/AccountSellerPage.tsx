@@ -70,23 +70,29 @@ export default function AccountSellerPage(props: AccountSellerPageProps) {
                     <Grid item>
                         <TextField fullWidth name="description" label="Description" variant="outlined" defaultValue={seller.data.description} onChange={onChange}></TextField>
                     </Grid>
+                    <Grid item>
+                        <Button variant="contained" color="primary" onClick={handleModifySeller}>Modify</Button>
+                    </Grid>
                 </Grid>
             </Box>
-            <Button variant="contained" color="primary" onClick={handleModifySeller}>Modify</Button>
+            <Divider/>
             <Box my={2}>
-                <Divider/>
+                <Grid container direction="column" spacing={1}>
+                    <Grid item>
+                        <DataGrid
+                            autoHeight
+                            columns={columns}
+                            rows={products}
+                            disableColumnMenu
+                            disableSelectionOnClick
+                            onRowClick={e=>history.push("/account/product", e.row)}
+                            />
+                    </Grid>
+                    <Grid item>
+                        <Button variant="contained" color="primary" onClick={handleAddProduct}>Add Product</Button>
+                    </Grid>
+                </Grid>
             </Box>
-            <Box my={2}>
-                <DataGrid
-                    autoHeight
-                    columns={columns}
-                    rows={products}
-                    disableColumnMenu
-                    disableSelectionOnClick
-                    onRowClick={e=>history.push("/account/product", e.row)}
-                    />
-            </Box>
-            <Button variant="contained" color="primary" onClick={handleAddProduct}>Add Product</Button>
         </>
     );
 }
