@@ -70,7 +70,7 @@ export default function SellerPage() {
             </Box>
             {auth && <Grid container spacing={1}>
                 <Grid item>
-                    <Button variant="contained" color="primary" onClick={handleAddToCart} disabled={selectionModel.length === 0 || undefined}>Add to cart</Button>
+                    <Button variant="contained" color="primary" onClick={handleAddToCart} disabled={selectionModel.length === 0}>Add to cart</Button>
                 </Grid>
                 <Grid item>
                     <Button variant="contained" color="primary" onClick={handleGoToCart}>Go to cart</Button>
